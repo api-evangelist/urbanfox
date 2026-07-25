@@ -1,0 +1,304 @@
+openapi: 3.1.0
+info:
+  title: UrbanFox Customer Cases OAuth API
+  version: 2.0.0
+  summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox customers.
+  description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant
+
+    metrics, and machine-to-machine credentials.
+
+
+    ## Authentication
+
+
+    JWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.
+
+
+    ## Authorization
+
+
+    Each protected operation declares its required scope in its OAuth 2.0 security requirement.
+
+    Tokens missing the required scope receive a `403`.
+
+
+    ## Versioning
+
+
+    Versioned via the URL path (`/v2/...`).
+
+    '
+  contact:
+    name: UrbanFox
+  license:
+    name: Proprietary - UrbanFox
+servers:
+- url: https://api.{tenant_slug}.urbanfox.io
+  description: 'Per-tenant API host. The {tenant_slug} subdomain matches the {tenant_slug} path parameter on each operation. Example: a tenant with slug ''demo-retail'' calls https://api.demo-retail.urbanfox.io/v2/demo-retail/cases.'
+  variables:
+    tenant_slug:
+      default: demo-retail
+      description: Tenant DNS slug (lowercase, hyphenated).
+security:
+- oauth2: []
+tags:
+- name: OAuth
+  description: OAuth token generation for machine-to-machine authentication.
+paths:
+  /v2/oauth/token:
+    post:
+      summary: Issue OAuth token
+      description: Generate an OAuth access token for machine-to-machine API access.
+      operationId: postOAuthToken
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthTokenResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unsupported-media-type
+                title: Application Error
+                status: 415
+                detail: Content-Type must be application/x-www-form-urlencoded
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: service-unavailable
+                title: Service Unavailable
+                status: 503
+                detail: Service temporarily unavailable
+      tags:
+      - OAuth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OAuthTokenFormRequest'
+components:
+  schemas:
+    ProblemDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
+          examples:
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    OAuthTokenResponse:
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          title: Access Token
+          description: 'JWT access token; send as `Authorization: Bearer <access_token>` on subsequent API requests'
+          examples:
+          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
+          readOnly: true
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+          description: OAuth 2.0 token type; always `Bearer` for this API
+          examples:
+          - Bearer
+          readOnly: true
+        expires_in:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Expires In
+          description: Number of seconds until the access token expires, counted from issuance
+          examples:
+          - 86400
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - access_token
+      - token_type
+      - expires_in
+      title: OAuthTokenResponse
+    OAuthTokenFormRequest:
+      additionalProperties: false
+      examples:
+      - client_id: A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+        client_secret: csec_example_7q9x2k4m6p8r0t1v3w5y
+        grant_type: client_credentials
+      properties:
+        grant_type:
+          const: client_credentials
+          description: OAuth 2.0 grant type; must be `client_credentials`.
+          examples:
+          - client_credentials
+          title: Grant Type
+          type: string
+        client_id:
+          description: OAuth 2.0 client identifier issued for the tenant.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          maxLength: 100
+          minLength: 1
+          title: Client Id
+          type: string
+        client_secret:
+          description: OAuth 2.0 client secret paired with `client_id`.
+          examples:
+          - csec_example_7q9x2k4m6p8r0t1v3w5y
+          maxLength: 200
+          minLength: 1
+          title: Client Secret
+          type: string
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      title: OAuthTokenFormRequestModel
+      type: object
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: 'OAuth 2.0 client-credentials flow. Request a token from `POST /v2/oauth/token` and send it as `Authorization: Bearer <access_token>`.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+          scopes:
+            create:enduseraccount: Create an end-user account
+            delete:enduseraccount: Delete an end-user account
+            read:case: Get a case
+            read:cases: List cases
+            read:enduseraccount: Get an end-user account
+            read:enduseraccounts: List end-user accounts
+            read:metrics: Get tenant metrics
+            read:snippet: Get integration snippets
+            read:tenant: Get tenant
+            read:tenant_auth_secret: Get tenant OAuth client credentials
+            update:case: Update a case
+            update:enduseraccount: Update an end-user account
+            update:tenant_auth_secret: Rotate tenant OAuth client secret

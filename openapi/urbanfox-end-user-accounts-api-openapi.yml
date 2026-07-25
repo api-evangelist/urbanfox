@@ -1,0 +1,1046 @@
+openapi: 3.1.0
+info:
+  title: UrbanFox Customer Cases End User Accounts API
+  version: 2.0.0
+  summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox customers.
+  description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant
+
+    metrics, and machine-to-machine credentials.
+
+
+    ## Authentication
+
+
+    JWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.
+
+
+    ## Authorization
+
+
+    Each protected operation declares its required scope in its OAuth 2.0 security requirement.
+
+    Tokens missing the required scope receive a `403`.
+
+
+    ## Versioning
+
+
+    Versioned via the URL path (`/v2/...`).
+
+    '
+  contact:
+    name: UrbanFox
+  license:
+    name: Proprietary - UrbanFox
+servers:
+- url: https://api.{tenant_slug}.urbanfox.io
+  description: 'Per-tenant API host. The {tenant_slug} subdomain matches the {tenant_slug} path parameter on each operation. Example: a tenant with slug ''demo-retail'' calls https://api.demo-retail.urbanfox.io/v2/demo-retail/cases.'
+  variables:
+    tenant_slug:
+      default: demo-retail
+      description: Tenant DNS slug (lowercase, hyphenated).
+security:
+- oauth2: []
+tags:
+- name: End User Accounts
+  description: End-user account retrieval, creation, updates, and deletion.
+paths:
+  /v2/{tenant_slug}/enduseraccounts/{website_account_id}:
+    get:
+      summary: Get an end-user account
+      description: Retrieve details for a single end-user account.
+      operationId: getEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+          examples:
+          - account-abc123
+        name: website_account_id
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.website_account_id
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'End User Account not found with ID: account-abc123 for client ''demo-retail'''
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - read:enduseraccount
+    put:
+      summary: Update an end-user account
+      description: Update mutable fields for an end-user account.
+      operationId: putEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+          examples:
+          - account-abc123
+        name: website_account_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUserAccountPutRequestModel'
+        required: true
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: body.crm_account_id
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'End User Account not found with ID: account-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - update:enduseraccount
+    delete:
+      summary: Delete an end-user account
+      description: Delete an end-user account and related account state.
+      operationId: deleteEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+          examples:
+          - account-abc123
+        name: website_account_id
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.website_account_id
+                  message: Validation failed
+                  type: validation_error
+        '204':
+          description: No Content
+          content: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'End User Account not found with ID: account-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - delete:enduseraccount
+  /v2/{tenant_slug}/enduseraccounts:
+    get:
+      summary: List end-user accounts
+      description: List end-user accounts for a tenant, optionally filtered by block status.
+      operationId: getEndUserAccounts
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Filter end-user accounts by whether they are blocked from accessing services.
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Blocked
+          description: Filter end-user accounts by whether they are blocked from accessing services.
+        name: is_blocked
+        in: query
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: query.is_blocked
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountListResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - read:enduseraccounts
+    post:
+      summary: Create an end-user account
+      description: Create an end-user account for a tenant.
+      operationId: postEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUserAccountPostRequestModel'
+        required: true
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: body.website_account_id
+                  message: Validation failed
+                  type: validation_error
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-already-exists
+                title: Application Error
+                status: 409
+                detail: End User Account 'account-abc123' already exists
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - create:enduseraccount
+components:
+  schemas:
+    EndUserAccountSingleResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountSingleResponse
+    EndUserAccountListItemResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountListItemResponse
+    APIResponse_EndUserAccountResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountResponse]
+    EndUserAccountResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountResponse
+    APIResponse_EndUserAccountListResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountListResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountListResponse]
+    ProblemDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
+          examples:
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    EndUserAccountListResponse:
+      properties:
+        end_user_accounts:
+          items:
+            $ref: '#/components/schemas/EndUserAccountListItemResponse'
+          type: array
+          title: End User Accounts
+          description: List of end user accounts for the client
+          examples:
+          - - crm_account_id: crm-abc456
+              is_blocked: false
+              is_fraudulent: false
+              is_quarantined: false
+              last_session_updated_on: '2024-01-15T10:30:00Z'
+              tenant_id: 00000000-0000-4000-8000-000000000000
+              website_account_id: account-abc123
+          readOnly: true
+      type: object
+      required:
+      - end_user_accounts
+      title: EndUserAccountListResponse
+    EndUserAccountPutRequestModel:
+      properties:
+        crm_account_id:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+        is_blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Blocked
+          description: Pass `true` to block the account from accessing services; omit to leave unchanged
+          examples:
+          - false
+        is_quarantined:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Quarantined
+          description: Pass `true` to quarantine the account pending manual review; omit to leave unchanged
+          examples:
+          - false
+        is_fraudulent:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Fraudulent
+          description: Pass `true` to mark the account as fraudulent; omit to leave unchanged
+          examples:
+          - false
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+      additionalProperties: false
+      type: object
+      title: EndUserAccountPutRequestModel
+      examples:
+      - is_blocked: true
+    EndUserAccountPostRequestModel:
+      properties:
+        tenant_id:
+          type: string
+          minLength: 1
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+        website_account_id:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          default: false
+          examples:
+          - false
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_id
+      title: EndUserAccountPostRequestModel
+      examples:
+      - tenant_id: 00000000-0000-4000-8000-000000000000
+        website_account_id: account-abc123
+    APIResponse_EndUserAccountSingleResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountSingleResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountSingleResponse]
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: 'OAuth 2.0 client-credentials flow. Request a token from `POST /v2/oauth/token` and send it as `Authorization: Bearer <access_token>`.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+          scopes:
+            create:enduseraccount: Create an end-user account
+            delete:enduseraccount: Delete an end-user account
+            read:case: Get a case
+            read:cases: List cases
+            read:enduseraccount: Get an end-user account
+            read:enduseraccounts: List end-user accounts
+            read:metrics: Get tenant metrics
+            read:snippet: Get integration snippets
+            read:tenant: Get tenant
+            read:tenant_auth_secret: Get tenant OAuth client credentials
+            update:case: Update a case
+            update:enduseraccount: Update an end-user account
+            update:tenant_auth_secret: Rotate tenant OAuth client secret

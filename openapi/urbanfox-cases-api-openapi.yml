@@ -1,0 +1,1177 @@
+openapi: 3.1.0
+info:
+  title: UrbanFox Customer Cases API
+  version: 2.0.0
+  summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox customers.
+  description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant
+
+    metrics, and machine-to-machine credentials.
+
+
+    ## Authentication
+
+
+    JWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.
+
+
+    ## Authorization
+
+
+    Each protected operation declares its required scope in its OAuth 2.0 security requirement.
+
+    Tokens missing the required scope receive a `403`.
+
+
+    ## Versioning
+
+
+    Versioned via the URL path (`/v2/...`).
+
+    '
+  contact:
+    name: UrbanFox
+  license:
+    name: Proprietary - UrbanFox
+servers:
+- url: https://api.{tenant_slug}.urbanfox.io
+  description: 'Per-tenant API host. The {tenant_slug} subdomain matches the {tenant_slug} path parameter on each operation. Example: a tenant with slug ''demo-retail'' calls https://api.demo-retail.urbanfox.io/v2/demo-retail/cases.'
+  variables:
+    tenant_slug:
+      default: demo-retail
+      description: Tenant DNS slug (lowercase, hyphenated).
+security:
+- oauth2: []
+tags:
+- name: Cases
+  description: Fraud case retrieval and updates.
+paths:
+  /v2/{tenant_slug}/cases/{case_id}:
+    get:
+      summary: Get a case
+      description: Retrieve full details for a single fraud case.
+      operationId: getCase
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Unique case identifier returned by `GET /cases`.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Case Id
+          description: Unique case identifier returned by `GET /cases`.
+          examples:
+          - case-abc123
+        name: case_id
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.case_id
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_CaseSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Case not found with ID: case-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Cases
+      security:
+      - oauth2:
+        - read:case
+    put:
+      summary: Update a case
+      description: Update the status of a fraud case.
+      operationId: putCase
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Unique case identifier returned by `GET /cases`.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Case Id
+          description: Unique case identifier returned by `GET /cases`.
+          examples:
+          - case-abc123
+        name: case_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseUpdateRequest'
+        required: true
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: body.status
+                  message: Input should be 'OPEN' or 'CLOSED'
+                  type: enum
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_CaseSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Case not found with ID: case-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Cases
+      security:
+      - oauth2:
+        - update:case
+  /v2/{tenant_slug}/cases:
+    get:
+      summary: List cases
+      description: List fraud cases for a tenant, optionally filtered by account or status.
+      operationId: getAllCases
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Filter cases by lifecycle status (`OPEN` or `CLOSED`). Omit to return cases in every status.
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/CaseStatus'
+          - type: 'null'
+          title: Status
+          description: Filter cases by lifecycle status (`OPEN` or `CLOSED`). Omit to return cases in every status.
+        name: status
+        in: query
+      - description: Filter cases by the end-user account they originated from.
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Website Account Id
+          description: Filter cases by the end-user account they originated from.
+        name: website_account_id
+        in: query
+      - description: Filter cases by whether the associated end-user account is blocked.
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: User Is Blocked
+          description: Filter cases by whether the associated end-user account is blocked.
+        name: user_is_blocked
+        in: query
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: query.status
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_CaseListResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Cases
+      security:
+      - oauth2:
+        - read:cases
+components:
+  schemas:
+    DetailedFraudOccurrence:
+      properties:
+        occurrence_id:
+          type: string
+          format: uuid
+          title: Occurrence Id
+          description: Stable identifier for this fraud occurrence within the case
+          examples:
+          - 15e341ed-6dae-4783-8647-32a7b7a8269a
+          readOnly: true
+        prediction_id:
+          type: string
+          minLength: 1
+          title: Prediction Id
+          description: Identifier of the model prediction that produced this occurrence
+          examples:
+          - pred_a1b2c3d4-20240115-103500000_2024-01-15T10:35:00Z
+          readOnly: true
+        session_id:
+          type: string
+          minLength: 1
+          title: Session Id
+          description: Identifier of the user session this occurrence was observed in
+          examples:
+          - a1b2c3d4-20240115-103500000
+          readOnly: true
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+          description: Time the model produced this occurrence (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:35:00Z'
+          readOnly: true
+        risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Risk Score
+          description: Risk score for this occurrence on a 1-5 scale (1=lowest risk, 5=highest risk)
+          examples:
+          - 4
+          readOnly: true
+        explanation:
+          $ref: '#/components/schemas/FraudExplanation'
+          description: Structured reasoning for why this occurrence was flagged
+          examples:
+          - fraud_reason: High velocity account creation
+            fraud_reason_description: The account was created very fast and may indicate a bot was used.
+            fraud_types:
+            - Bot Creation
+            model_behaviour:
+            - model_name: bos_session_aggregate_classifier
+              top_contributors:
+              - alignment: supporting
+                description: Total number of events in the session
+                direction: toward_fraud
+                direction_specific: increases_BotActor_probability
+                feature: total_event_count
+                feature_value: 30
+                impact_level: critical
+                plain_name: Total Event Count
+                shap_value: 1.151
+              type: shap
+          readOnly: true
+      type: object
+      required:
+      - occurrence_id
+      - prediction_id
+      - session_id
+      - generated_at
+      - risk_score
+      - explanation
+      title: DetailedFraudOccurrence
+    ModelBehaviour:
+      properties:
+        type:
+          type: string
+          minLength: 1
+          title: Type
+          description: Attribution method type
+          examples:
+          - shap
+          readOnly: true
+        model_name:
+          type: string
+          minLength: 1
+          title: Model Name
+          description: Model that produced this attribution
+          examples:
+          - bos_session_aggregate_classifier
+          readOnly: true
+        top_contributors:
+          items:
+            $ref: '#/components/schemas/ShapContributor'
+          type: array
+          title: Top Contributors
+          description: Ranked feature contributions to the prediction
+          examples:
+          - - alignment: supporting
+              description: Total number of events in the session
+              direction: toward_fraud
+              direction_specific: increases_BotActor_probability
+              feature: total_event_count
+              feature_value: 30
+              impact_level: critical
+              plain_name: Total Event Count
+              shap_value: 1.151
+          readOnly: true
+      type: object
+      required:
+      - type
+      - model_name
+      title: ModelBehaviour
+    APIResponse_CaseListResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/CaseListResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[CaseListResponse]
+    CaseSingleResponse:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+          description: Unique case identifier used in `/cases/{case_id}` paths
+          examples:
+          - case-abc123
+          readOnly: true
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this case
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+          readOnly: true
+        session_id:
+          type: string
+          title: Session Id
+          description: Identifier of the user session this case originated from
+          examples:
+          - a1b2c3d4-20240115-103500000
+          readOnly: true
+        unique_id:
+          type: string
+          format: uuid
+          title: Unique Id
+          description: Opaque record identifier; clients should use `case_id` for all references
+          examples:
+          - 8f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b
+          readOnly: true
+        end_user_is_blocked:
+          type: boolean
+          title: End User Is Blocked
+          description: True when the end user account associated with this case is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Current lifecycle status of the case (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the case was opened (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: Time of the most recent case update (RFC 3339 / ISO 8601 UTC); null when the case has never been updated
+          examples:
+          - '2024-01-15T14:20:00Z'
+          readOnly: true
+        current_state:
+          anyOf:
+          - $ref: '#/components/schemas/CaseState'
+          - type: 'null'
+          description: Most recent state snapshot in the case lifecycle
+          examples:
+          - case_status: OPEN
+            changed_at: '2024-01-15T10:35:00Z'
+            changed_by: system
+            reason: Case created from model prediction
+            score: 4
+            session_status: ACTIVE
+            state_id: 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
+          readOnly: true
+        state_history:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CaseState'
+            type: array
+          - type: 'null'
+          title: State History
+          description: All prior state snapshots for this case ordered chronologically (oldest first)
+          examples:
+          - - case_status: OPEN
+              changed_at: '2024-01-15T10:35:00Z'
+              changed_by: system
+              reason: Case created from model prediction
+              score: 4
+              session_status: ACTIVE
+              state_id: 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
+          readOnly: true
+        details:
+          $ref: '#/components/schemas/CaseDetails'
+          description: Fraud analysis output from the risk-scoring model (labels, summary, recommended action)
+          examples:
+          - fraud_labels:
+            - Account Takeover
+            highlights:
+            - Multiple failed login attempts
+            - IP from high-risk country
+            overall_risk_score: 3
+            primary_fraud_label: Account Takeover
+            recommended_action: BLOCK
+            summary: Account takeover attempt detected from suspicious IP
+          readOnly: true
+        fraud_occurrences:
+          additionalProperties:
+            $ref: '#/components/schemas/DetailedFraudOccurrence'
+          type: object
+          title: Fraud Occurrences
+          description: Fraud occurrences for this case, keyed by `occurrence_id`. Entries follow the detailed fraud occurrence shape.
+          examples:
+          - 15e341ed-6dae-4783-8647-32a7b7a8269a:
+              explanation:
+                fraud_reason: High velocity account creation
+                fraud_reason_description: The account was created very fast and may indicate a bot was used.
+                fraud_types:
+                - Bot Creation
+                model_behaviour:
+                - model_name: bos_session_aggregate_classifier
+                  top_contributors:
+                  - alignment: supporting
+                    description: Total number of events in the session
+                    direction: toward_fraud
+                    direction_specific: increases_BotActor_probability
+                    feature: total_event_count
+                    feature_value: 30
+                    impact_level: critical
+                    plain_name: Total Event Count
+                    shap_value: 1.151
+                  type: shap
+              generated_at: '2024-01-15T10:35:00Z'
+              occurrence_id: 15e341ed-6dae-4783-8647-32a7b7a8269a
+              prediction_id: pred_a1b2c3d4-20240115-103500000_2024-01-15T10:35:00Z
+              risk_score: 4
+              session_id: a1b2c3d4-20240115-103500000
+          readOnly: true
+      type: object
+      required:
+      - case_id
+      - tenant_id
+      - session_id
+      - unique_id
+      - end_user_is_blocked
+      - status
+      - created_at
+      - details
+      title: CaseSingleResponse
+    FraudTypes:
+      type: string
+      enum:
+      - Bot Creation
+      - Synthetic Fraud
+      - Account Takeover
+      - Organic Fraud
+      title: FraudTypes
+    FraudLabels:
+      type: string
+      enum:
+      - Bot
+      - Synthetic
+      - Account Takeover
+      - Organic
+      title: FraudLabels
+    CaseState:
+      properties:
+        state_id:
+          type: string
+          format: uuid
+          title: State Id
+          description: Stable identifier for this state snapshot, unique within the case
+          examples:
+          - 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
+          readOnly: true
+        case_status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Case lifecycle status captured by this snapshot (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        session_status:
+          $ref: '#/components/schemas/SessionStatus'
+          description: Status of the underlying user session at the time of this snapshot (ACTIVE or FINISHED)
+          examples:
+          - ACTIVE
+          readOnly: true
+        score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Score
+          description: Risk score captured by this snapshot, on a 1-5 scale (1=lowest risk, 5=highest risk)
+          examples:
+          - 4
+          readOnly: true
+        changed_at:
+          type: string
+          format: date-time
+          title: Changed At
+          description: Time this state change was recorded (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:35:00Z'
+          readOnly: true
+        changed_by:
+          type: string
+          minLength: 1
+          title: Changed By
+          description: Identifier of the actor that triggered this state change. Use `system` for automated transitions; otherwise the user_id of the operator.
+          default: system
+          examples:
+          - system
+          readOnly: true
+        reason:
+          type: string
+          minLength: 1
+          title: Reason
+          description: Human-readable explanation of why the state changed
+          examples:
+          - Case created from model prediction
+          readOnly: true
+      type: object
+      required:
+      - state_id
+      - case_status
+      - session_status
+      - score
+      - changed_at
+      - reason
+      title: CaseState
+    ShapContributor:
+      properties:
+        feature:
+          type: string
+          minLength: 1
+          title: Feature
+          description: Machine-readable feature name used by the model
+          examples:
+          - total_event_count
+          readOnly: true
+        plain_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plain Name
+          description: Human-readable feature label for UI display
+          examples:
+          - Total Event Count
+          readOnly: true
+        feature_value:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: string
+          - type: boolean
+          - type: 'null'
+          title: Feature Value
+          description: Observed value of this feature for the scored session; null when unavailable
+          examples:
+          - 30
+          readOnly: true
+        shap_value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Shap Value
+          description: Raw signed SHAP value (positive = toward fraud, negative = toward safe)
+          examples:
+          - 1.151
+          readOnly: true
+        direction:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Direction
+          description: Whether this feature pushed the prediction toward fraud or away from it
+          examples:
+          - toward_fraud
+          readOnly: true
+        alignment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alignment
+          description: Whether this feature supports or contradicts the model's prediction
+          examples:
+          - supporting
+          readOnly: true
+        impact_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Impact Level
+          description: Importance bucket assigned to this feature
+          examples:
+          - critical
+          readOnly: true
+        direction_specific:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Direction Specific
+          description: Model-specific probability movement caused by this feature
+          examples:
+          - increases_BotActor_probability
+          readOnly: true
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Plain-language explanation of what the feature measures
+          examples:
+          - Total number of events in the session
+          readOnly: true
+      type: object
+      required:
+      - feature
+      title: ShapContributor
+    ProblemDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
+          examples:
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    FraudExplanation:
+      properties:
+        fraud_reason:
+          type: string
+          minLength: 1
+          title: Fraud Reason
+          description: Short label naming the dominant fraud signal that triggered this occurrence
+          examples:
+          - High velocity account creation
+          readOnly: true
+        fraud_reason_description:
+          type: string
+          minLength: 1
+          title: Fraud Reason Description
+          description: Full sentence describing the fraud signal in plain language
+          examples:
+          - The account was created very fast and may indicate a bot was used.
+          readOnly: true
+        fraud_types:
+          items:
+            $ref: '#/components/schemas/FraudTypes'
+          type: array
+          minItems: 1
+          title: Fraud Types
+          description: Categorical fraud types associated with this occurrence
+          examples:
+          - - Bot Creation
+          readOnly: true
+        model_behaviour:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ModelBehaviour'
+            type: array
+          - type: 'null'
+          title: Model Behaviour
+          description: Per-prediction model explainability records (e.g., SHAP attribution). Each entry describes one model's feature contributions; null when unavailable.
+          examples:
+          - - model_name: bos_session_aggregate_classifier
+              top_contributors:
+              - alignment: supporting
+                description: Total number of events in the session
+                direction: toward_fraud
+                direction_specific: increases_BotActor_probability
+                feature: total_event_count
+                feature_value: 30
+                impact_level: critical
+                plain_name: Total Event Count
+                shap_value: 1.151
+              type: shap
+          readOnly: true
+      type: object
+      required:
+      - fraud_reason
+      - fraud_reason_description
+      - fraud_types
+      title: FraudExplanation
+    CaseUpdateRequest:
+      properties:
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: New lifecycle status to apply to the case (OPEN or CLOSED)
+          examples:
+          - CLOSED
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      title: CaseUpdateRequest
+      examples:
+      - status: CLOSED
+    CaseListResponse:
+      properties:
+        cases:
+          items:
+            $ref: '#/components/schemas/CaseListItemResponse'
+          type: array
+          title: Cases
+          description: List of cases for the tenant
+          examples:
+          - - case_id: case-abc123
+              created_at: '2024-01-15T10:30:00Z'
+              overall_risk_score: 3
+              status: OPEN
+              website_account_id: account-abc123
+          readOnly: true
+      type: object
+      required:
+      - cases
+      title: CaseListResponse
+    CaseListItemResponse:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+          description: Unique case identifier used in `/cases/{case_id}` paths
+          examples:
+          - case-abc123
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the case was opened (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Current lifecycle status of the case (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        overall_risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Overall Risk Score
+          description: Aggregate risk score across all fraud signals, on a 1-5 scale (1=lowest risk, 5=highest risk)
+          examples:
+          - 3
+          readOnly: true
+      type: object
+      required:
+      - case_id
+      - created_at
+      - status
+      - overall_risk_score
+      title: CaseListItemResponse
+    CaseStatus:
+      type: string
+      enum:
+      - OPEN
+      - CLOSED
+      title: CaseStatus
+    CaseDetails:
+      properties:
+        overall_risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Overall Risk Score
+          description: Aggregate risk score across all fraud signals, on a 1-5 scale (1=lowest risk, 5=highest risk)
+          examples:
+          - 3
+          readOnly: true
+        fraud_labels:
+          items:
+            $ref: '#/components/schemas/FraudLabels'
+          type: array
+          minItems: 1
+          title: Fraud Labels
+          description: All fraud categories detected for this case; must contain at least the `primary_fraud_label`
+          examples:
+          - - Account Takeover
+            - Bot
+          readOnly: true
+        primary_fraud_label:
+          $ref: '#/components/schemas/FraudLabels'
+          minLength: 1
+          description: Most significant fraud category for this case; always present in `fraud_labels`
+          examples:
+          - Account Takeover
+          readOnly: true
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: Natural-language summary of the detected fraud signals; null when no summary is available
+          examples:
+          - Account takeover attempt detected from suspicious IP
+          readOnly: true
+        highlights:
+          items:
+            type: string
+          type: array
+          title: Highlights
+          description: Short bullet points highlighting the strongest fraud signals contributing to the score
+          examples:
+          - - Multiple failed login attempts
+            - IP from high-risk country
+          readOnly: true
+        recommended_action:
+          anyOf:
+          - $ref: '#/components/schemas/RecommendedAction'
+          - type: 'null'
+          description: 'Suggested response action: MONITOR, CHALLENGE, BLOCK, or ESCALATE'
+          default: BLOCK
+          examples:
+          - BLOCK
+          readOnly: true
+      type: object
+      required:
+      - overall_risk_score
+      - fraud_labels
+      - primary_fraud_label
+      - summary
+      title: CaseDetails
+    APIResponse_CaseSingleResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/CaseSingleResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[CaseSingleResponse]
+    RecommendedAction:
+      type: string
+      enum:
+      - MONITOR
+      - CHALLENGE
+      - BLOCK
+      - ESCALATE
+      title: RecommendedAction
+    SessionStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - FINISHED
+      title: SessionStatus
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: 'OAuth 2.0 client-credentials flow. Request a token from `POST /v2/oauth/token` and send it as `Authorization: Bearer <access_token>`.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+          scopes:
+            create:enduseraccount: Create an end-user account
+            delete:enduseraccount: Delete an end-user account
+            read:case: Get a case
+            read:cases: List cases
+            read:enduseraccount: Get an end-user account
+            read:enduseraccounts: List end-user accounts
+            read:metrics: Get tenant metrics
+            read:snippet: Get integration snippets
+            read:tenant: Get tenant
+            read:tenant_auth_secret: Get tenant OAuth client credentials
+            update:case: Update a case
+            update:enduseraccount: Update an end-user account
+            update:tenant_auth_secret: Rotate tenant OAuth client secret

@@ -1,0 +1,604 @@
+openapi: 3.1.0
+info:
+  title: UrbanFox Customer Cases Tenants API
+  version: 2.0.0
+  summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox customers.
+  description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant
+
+    metrics, and machine-to-machine credentials.
+
+
+    ## Authentication
+
+
+    JWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.
+
+
+    ## Authorization
+
+
+    Each protected operation declares its required scope in its OAuth 2.0 security requirement.
+
+    Tokens missing the required scope receive a `403`.
+
+
+    ## Versioning
+
+
+    Versioned via the URL path (`/v2/...`).
+
+    '
+  contact:
+    name: UrbanFox
+  license:
+    name: Proprietary - UrbanFox
+servers:
+- url: https://api.{tenant_slug}.urbanfox.io
+  description: 'Per-tenant API host. The {tenant_slug} subdomain matches the {tenant_slug} path parameter on each operation. Example: a tenant with slug ''demo-retail'' calls https://api.demo-retail.urbanfox.io/v2/demo-retail/cases.'
+  variables:
+    tenant_slug:
+      default: demo-retail
+      description: Tenant DNS slug (lowercase, hyphenated).
+security:
+- oauth2: []
+tags:
+- name: Tenants
+  description: Tenant details and tenant authentication credentials.
+paths:
+  /v2/{tenant_slug}/tenants:
+    get:
+      summary: Get tenant
+      description: Retrieve tenant identifiers and integration configuration.
+      operationId: getTenant
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_TenantDetailsResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Tenants
+      security:
+      - oauth2:
+        - read:tenant
+  /v2/{tenant_slug}/tenants/auth-secret:
+    get:
+      summary: Get tenant OAuth client credentials
+      description: Retrieve the current OAuth client credentials for a tenant.
+      operationId: getTenantAuthSecret
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_TenantAuthSecretResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: service-unavailable
+                title: Service Unavailable
+                status: 503
+                detail: Service temporarily unavailable
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Tenants
+      security:
+      - oauth2:
+        - read:tenant_auth_secret
+  /v2/{tenant_slug}/tenants/rotate-auth-secret:
+    post:
+      summary: Rotate tenant OAuth client secret
+      description: Rotate a tenant OAuth client secret and return the new credentials.
+      operationId: postRotateTenantAuthSecret
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_TenantRotateAuthSecretResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: service-unavailable
+                title: Service Unavailable
+                status: 503
+                detail: Service temporarily unavailable
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Tenants
+      security:
+      - oauth2:
+        - update:tenant_auth_secret
+components:
+  schemas:
+    APIResponse_TenantAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantAuthSecretResponse]
+    APIResponse_TenantRotateAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantRotateAuthSecretResponse]
+    APIResponse_TenantDetailsResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantDetailsResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantDetailsResponse]
+    ProblemDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
+          examples:
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    TenantDetailsResponse:
+      properties:
+        tenant_name:
+          type: string
+          title: Tenant Name
+          description: Unique tenant slug returned as tenant_name for compatibility (e.g. `/v2/{tenant_slug}/...`)
+          examples:
+          - demo-retail
+          readOnly: true
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Stable UUID identifier for the tenant, embedded in JWT claims and downstream services
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        clickstream_app_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Clickstream App Id
+          description: 'Clickstream application identifier injected into the tracking snippet (format: `<tenant_slug>_<32-char-hex>`); null until provisioned'
+          examples:
+          - demo-retail_00000000000000000000000000000001
+          readOnly: true
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+          description: Time the tenant record was created (RFC 3339 / ISO 8601 UTC); null for tenants created before this field was tracked
+          examples:
+          - '2026-03-10T14:32:00Z'
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_name
+      - tenant_id
+      - client_id
+      title: TenantDetailsResponse
+    TenantRotateAuthSecretResponse:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        client_secret:
+          type: string
+          title: Client Secret
+          description: Newly issued OAuth 2.0 client secret; the previous secret is invalidated immediately
+          examples:
+          - csec_example_9v1t0r8p6m4k2xq7y5w3
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: TenantRotateAuthSecretResponse
+    TenantAuthSecretResponse:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        client_secret:
+          type: string
+          title: Client Secret
+          description: Current OAuth 2.0 client secret; send as `client_secret` (with `client_id`) when requesting a token from `POST /v2/oauth/token`
+          examples:
+          - csec_example_7q9x2k4m6p8r0t1v3w5y
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: TenantAuthSecretResponse
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: 'OAuth 2.0 client-credentials flow. Request a token from `POST /v2/oauth/token` and send it as `Authorization: Bearer <access_token>`.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+          scopes:
+            create:enduseraccount: Create an end-user account
+            delete:enduseraccount: Delete an end-user account
+            read:case: Get a case
+            read:cases: List cases
+            read:enduseraccount: Get an end-user account
+            read:enduseraccounts: List end-user accounts
+            read:metrics: Get tenant metrics
+            read:snippet: Get integration snippets
+            read:tenant: Get tenant
+            read:tenant_auth_secret: Get tenant OAuth client credentials
+            update:case: Update a case
+            update:enduseraccount: Update an end-user account
+            update:tenant_auth_secret: Rotate tenant OAuth client secret
