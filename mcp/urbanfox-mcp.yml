@@ -1,0 +1,54 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/urbanfox-customer-api-openapi.yml
+status: candidate
+notes: No official UrbanFox MCP server was found (no GitHub org, no npm packages,
+  no MCP registry listing, no mention in docs.urbanfox.io as of 2026-07-21). This
+  is a candidate tool list derived one-tool-per-operation from the public UrbanFox
+  Customer API OpenAPI 2.0.0.
+server:
+  name: urbanfox
+  transport: http
+tools:
+- name: get_tenant
+  description: Retrieve tenant identifiers and integration configuration
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getTenant
+- name: get_tenant_auth_secret
+  description: Get tenant OAuth client credentials
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getTenantAuthSecret
+- name: rotate_tenant_auth_secret
+  description: Rotate tenant OAuth client secret
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#postRotateTenantAuthSecret
+- name: get_case
+  description: Get a fraud case
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getCase
+- name: update_case
+  description: Update a fraud case (status, state)
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#putCase
+- name: list_cases
+  description: List fraud cases with status / account / blocked filters
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getAllCases
+- name: get_end_user_account
+  description: Get an end-user account
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getEndUserAccount
+- name: update_end_user_account
+  description: Update an end-user account (block, unblock, link)
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#putEndUserAccount
+- name: delete_end_user_account
+  description: Delete an end-user account
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#deleteEndUserAccount
+- name: list_end_user_accounts
+  description: List end-user accounts with blocked filter
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getEndUserAccounts
+- name: create_end_user_account
+  description: Create an end-user account
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#postEndUserAccount
+- name: get_tenant_metrics
+  description: Get aggregated tenant activity metrics for a date range
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getMetricsAggregate
+- name: get_integration_snippet
+  description: Get clickstream integration snippets for the tenant
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#getSnippet
+- name: issue_oauth_token
+  description: Issue an OAuth access token (client credentials)
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#postOAuthToken

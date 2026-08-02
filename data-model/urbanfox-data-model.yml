@@ -1,0 +1,65 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/urbanfox-customer-api-openapi.yml
+notes: Entity-relationship graph derived from OpenAPI component schemas, $ref
+  links, and id-reference fields. All entities are tenant-scoped (tenant slug in
+  host and path).
+entities:
+- name: Tenant
+  schema: TenantDetailsResponse
+  ids: [tenant_id, tenant_name, client_id, clickstream_app_id]
+- name: Case
+  schema: CaseListItemResponse / CaseSingleResponse
+  ids: [case_id]
+  fields_of_note: [status, overall_risk_score, primary_fraud_label,
+    recommended_action]
+- name: FraudOccurrence
+  schema: DetailedFraudOccurrence
+  ids: [occurrence_id, prediction_id, session_id]
+- name: FraudExplanation
+  schema: FraudExplanation
+  fields_of_note: [fraud_reason, fraud_types, model_behaviour]
+- name: EndUserAccount
+  schema: EndUserAccountResponse
+  ids: [website_account_id, crm_account_id]
+  fields_of_note: [is_blocked, is_quarantined, is_fraudulent]
+- name: MetricDataPoint
+  schema: MetricDataPoint
+  fields_of_note: [timestamp, total_events, unique_sessions, guest_sessions,
+    non_guest_sessions, session_starts, unique_ids]
+- name: Snippet
+  schema: SnippetItem
+  fields_of_note: [framework, snippet]
+relationships:
+- from: Tenant
+  to: Case
+  kind: has_many
+  via: tenant_slug (path scope)
+- from: Tenant
+  to: EndUserAccount
+  kind: has_many
+  via: tenant_id
+- from: Tenant
+  to: MetricDataPoint
+  kind: has_many
+  via: tenant_slug (path scope)
+- from: Tenant
+  to: Snippet
+  kind: has_many
+  via: tenant_slug (path scope); snippet response also returns app_id + tenant_id
+- from: Case
+  to: EndUserAccount
+  kind: belongs_to
+  via: website_account_id
+- from: Case
+  to: FraudOccurrence
+  kind: has_many
+  via: CaseSingleResponse $ref DetailedFraudOccurrence
+- from: FraudOccurrence
+  to: FraudExplanation
+  kind: has_one
+  via: explanation ($ref FraudExplanation)
+- from: EndUserAccount
+  to: Case
+  kind: has_many
+  via: cases?website_account_id= filter

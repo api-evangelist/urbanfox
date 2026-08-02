@@ -1,0 +1,10 @@
+generated: '2026-07-21'
+method: searched
+source: npm/PyPI/GitHub searches, 2026-07-21
+notes: No first-party client libraries found. npm registry search for "urbanfox"
+  returns no UrbanFox packages, PyPI has no "urbanfox" project (404), and there is
+  no public UrbanFox GitHub organization. The docs publish curl examples only; the
+  only shipped client-side code is the Clickstream collector script (see
+  components/urbanfox-components.yml), which is not distributed through a package
+  registry. Empty result recorded as valid data.
+packages: []

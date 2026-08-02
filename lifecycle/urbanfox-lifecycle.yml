@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.urbanfox.io/ + openapi/urbanfox-customer-api-openapi.yml
+versioning:
+  scheme: uri-path
+  current: v2
+  evidence: OpenAPI info description states "Versioned via the URL path (/v2/...)";
+    all paths are under /v2/, spec version 2.0.0.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No published deprecation policy and no Sunset/Deprecation header support
+    found in docs or spec as of 2026-07-21.
+sla:
+  url: null
+  notes: No published SLA found.
+status_page: null
+status_page_notes: status.urbanfox.io does not resolve; no status page linked from
+  the site or docs as of 2026-07-21.
+credential_lifecycle:
+  token_ttl_seconds: 86400
+  rotation: Zero-downtime tenant client-secret rotation via
+    POST /v2/{tenant_slug}/tenants/rotate-auth-secret
+    (https://docs.urbanfox.io/how-to/rotate-auth-secret).
+deprecated_operations: []

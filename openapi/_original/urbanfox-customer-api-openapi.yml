@@ -1,0 +1,3354 @@
+openapi: 3.1.0
+info:
+  title: UrbanFox Customer API
+  version: 2.0.0
+  summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox
+    customers.
+  description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts,
+    tenant
+
+    metrics, and machine-to-machine credentials.
+
+
+    ## Authentication
+
+
+    JWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials
+    flow.
+
+
+    ## Authorization
+
+
+    Each protected operation declares its required scope in its OAuth 2.0 security
+    requirement.
+
+    Tokens missing the required scope receive a `403`.
+
+
+    ## Versioning
+
+
+    Versioned via the URL path (`/v2/...`).
+
+    '
+  contact:
+    name: UrbanFox
+  license:
+    name: Proprietary - UrbanFox
+servers:
+- url: https://api.{tenant_slug}.urbanfox.io
+  description: 'Per-tenant API host. The {tenant_slug} subdomain matches the {tenant_slug}
+    path parameter on each operation. Example: a tenant with slug ''demo-retail''
+    calls https://api.demo-retail.urbanfox.io/v2/demo-retail/cases.'
+  variables:
+    tenant_slug:
+      default: demo-retail
+      description: Tenant DNS slug (lowercase, hyphenated).
+paths:
+  /v2/{tenant_slug}/tenants:
+    get:
+      summary: Get tenant
+      description: Retrieve tenant identifiers and integration configuration.
+      operationId: getTenant
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_TenantDetailsResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Tenants
+      security:
+      - oauth2:
+        - read:tenant
+  /v2/{tenant_slug}/tenants/auth-secret:
+    get:
+      summary: Get tenant OAuth client credentials
+      description: Retrieve the current OAuth client credentials for a tenant.
+      operationId: getTenantAuthSecret
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_TenantAuthSecretResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: service-unavailable
+                title: Service Unavailable
+                status: 503
+                detail: Service temporarily unavailable
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Tenants
+      security:
+      - oauth2:
+        - read:tenant_auth_secret
+  /v2/{tenant_slug}/tenants/rotate-auth-secret:
+    post:
+      summary: Rotate tenant OAuth client secret
+      description: Rotate a tenant OAuth client secret and return the new credentials.
+      operationId: postRotateTenantAuthSecret
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_TenantRotateAuthSecretResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: service-unavailable
+                title: Service Unavailable
+                status: 503
+                detail: Service temporarily unavailable
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Tenants
+      security:
+      - oauth2:
+        - update:tenant_auth_secret
+  /v2/{tenant_slug}/cases/{case_id}:
+    get:
+      summary: Get a case
+      description: Retrieve full details for a single fraud case.
+      operationId: getCase
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Unique case identifier returned by `GET /cases`.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Case Id
+          description: Unique case identifier returned by `GET /cases`.
+          examples:
+          - case-abc123
+        name: case_id
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.case_id
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_CaseSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Case not found with ID: case-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Cases
+      security:
+      - oauth2:
+        - read:case
+    put:
+      summary: Update a case
+      description: Update the status of a fraud case.
+      operationId: putCase
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Unique case identifier returned by `GET /cases`.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Case Id
+          description: Unique case identifier returned by `GET /cases`.
+          examples:
+          - case-abc123
+        name: case_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseUpdateRequest'
+        required: true
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: body.status
+                  message: Input should be 'OPEN' or 'CLOSED'
+                  type: enum
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_CaseSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Case not found with ID: case-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Cases
+      security:
+      - oauth2:
+        - update:case
+  /v2/{tenant_slug}/cases:
+    get:
+      summary: List cases
+      description: List fraud cases for a tenant, optionally filtered by account or
+        status.
+      operationId: getAllCases
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Filter cases by lifecycle status (`OPEN` or `CLOSED`). Omit to
+          return cases in every status.
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/CaseStatus'
+          - type: 'null'
+          title: Status
+          description: Filter cases by lifecycle status (`OPEN` or `CLOSED`). Omit
+            to return cases in every status.
+        name: status
+        in: query
+      - description: Filter cases by the end-user account they originated from.
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Website Account Id
+          description: Filter cases by the end-user account they originated from.
+        name: website_account_id
+        in: query
+      - description: Filter cases by whether the associated end-user account is blocked.
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: User Is Blocked
+          description: Filter cases by whether the associated end-user account is
+            blocked.
+        name: user_is_blocked
+        in: query
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: query.status
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_CaseListResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Cases
+      security:
+      - oauth2:
+        - read:cases
+  /v2/{tenant_slug}/enduseraccounts/{website_account_id}:
+    get:
+      summary: Get an end-user account
+      description: Retrieve details for a single end-user account.
+      operationId: getEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Identifier of the end-user's website account; the literal string
+          `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end-user's website account; the literal string
+            `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+          examples:
+          - account-abc123
+        name: website_account_id
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.website_account_id
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'End User Account not found with ID: account-abc123 for client
+                  ''demo-retail'''
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - read:enduseraccount
+    put:
+      summary: Update an end-user account
+      description: Update mutable fields for an end-user account.
+      operationId: putEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Identifier of the end-user's website account; the literal string
+          `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end-user's website account; the literal string
+            `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+          examples:
+          - account-abc123
+        name: website_account_id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUserAccountPutRequestModel'
+        required: true
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: body.crm_account_id
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountSingleResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'End User Account not found with ID: account-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - update:enduseraccount
+    delete:
+      summary: Delete an end-user account
+      description: Delete an end-user account and related account state.
+      operationId: deleteEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Identifier of the end-user's website account; the literal string
+          `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end-user's website account; the literal string
+            `UNKNOWN` addresses accounts whose website identifier could not be resolved.
+          examples:
+          - account-abc123
+        name: website_account_id
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.website_account_id
+                  message: Validation failed
+                  type: validation_error
+        '204':
+          description: No Content
+          content: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'End User Account not found with ID: account-abc123'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - delete:enduseraccount
+  /v2/{tenant_slug}/enduseraccounts:
+    get:
+      summary: List end-user accounts
+      description: List end-user accounts for a tenant, optionally filtered by block
+        status.
+      operationId: getEndUserAccounts
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Filter end-user accounts by whether they are blocked from accessing
+          services.
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Blocked
+          description: Filter end-user accounts by whether they are blocked from accessing
+            services.
+        name: is_blocked
+        in: query
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: query.is_blocked
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountListResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - read:enduseraccounts
+    post:
+      summary: Create an end-user account
+      description: Create an end-user account for a tenant.
+      operationId: postEndUserAccount
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EndUserAccountPostRequestModel'
+        required: true
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: body.website_account_id
+                  message: Validation failed
+                  type: validation_error
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_EndUserAccountResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-already-exists
+                title: Application Error
+                status: 409
+                detail: End User Account 'account-abc123' already exists
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - End User Accounts
+      security:
+      - oauth2:
+        - create:enduseraccount
+  /v2/{tenant_slug}/metrics:
+    get:
+      summary: Get tenant metrics
+      description: Retrieve tenant activity metrics for a selected date range.
+      operationId: getMetricsAggregate
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      - description: Inclusive start of the metrics query window (RFC 3339 / ISO 8601
+          UTC, milliseconds optional).
+        required: true
+        schema:
+          type: string
+          maxLength: 30
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$
+          format: date-time
+          title: Start Date
+          description: Inclusive start of the metrics query window (RFC 3339 / ISO
+            8601 UTC, milliseconds optional).
+          examples:
+          - '2024-01-01T00:00:00Z'
+        name: start_date
+        in: query
+      - description: Exclusive end of the metrics query window (RFC 3339 / ISO 8601
+          UTC, milliseconds optional). Events at exactly `end_date` are not included;
+          must be strictly greater than `start_date`.
+        required: true
+        schema:
+          type: string
+          maxLength: 30
+          pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$
+          format: date-time
+          title: End Date
+          description: Exclusive end of the metrics query window (RFC 3339 / ISO 8601
+            UTC, milliseconds optional). Events at exactly `end_date` are not included;
+            must be strictly greater than `start_date`.
+          examples:
+          - '2024-01-31T23:59:59Z'
+        name: end_date
+        in: query
+      - description: 'Time bucket size for the returned series. Omit to receive raw,
+          non-aggregated data points. When set, the response includes a data point
+          for every interval in `[start_date, end_date)` (half-open: `start_date`
+          inclusive, `end_date` exclusive), filling missing intervals with zero values.
+          Range limits: `minute` requires `end_date - start_date <= 7 days`; `hour`
+          requires `end_date - start_date <= 90 days`; `day`, `week`, `month`, `quarter`,
+          `year` have no explicit limit.'
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/Aggregations'
+          - type: 'null'
+          title: Aggregation
+          description: 'Time bucket size for the returned series. Omit to receive
+            raw, non-aggregated data points. When set, the response includes a data
+            point for every interval in `[start_date, end_date)` (half-open: `start_date`
+            inclusive, `end_date` exclusive), filling missing intervals with zero
+            values. Range limits: `minute` requires `end_date - start_date <= 7 days`;
+            `hour` requires `end_date - start_date <= 90 days`; `day`, `week`, `month`,
+            `quarter`, `year` have no explicit limit.'
+        name: aggregation
+        in: query
+      - description: Specific metric to return (`timestamp`, `total_events`, `guest_sessions`,
+          `non_guest_sessions`, `unique_sessions`, `unique_ids`, `session_starts`).
+          Omit to receive every metric for each data point.
+        required: false
+        schema:
+          anyOf:
+          - $ref: '#/components/schemas/MetricsFields'
+          - type: 'null'
+          title: Metric
+          description: Specific metric to return (`timestamp`, `total_events`, `guest_sessions`,
+            `non_guest_sessions`, `unique_sessions`, `unique_ids`, `session_starts`).
+            Omit to receive every metric for each data point.
+        name: metric
+        in: query
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: query.start_date
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_MetricListResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Metrics
+      security:
+      - oauth2:
+        - read:metrics
+  /v2/{tenant_slug}/snippet:
+    get:
+      summary: Get integration snippets
+      description: Retrieve integration snippets and identifiers for a tenant.
+      operationId: getSnippet
+      parameters:
+      - description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+          characters).
+        required: true
+        schema:
+          type: string
+          maxLength: 100
+          minLength: 3
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*$
+          title: Tenant Name
+          description: Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100
+            characters).
+          examples:
+          - demo-retail
+        name: tenant_slug
+        in: path
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIResponse_SnippetResponse_'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: item-not-found
+                title: Application Error
+                status: 404
+                detail: 'Tenant not found with name: demo-retail'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: forbidden
+                title: Forbidden
+                status: 403
+                detail: Access denied
+      tags:
+      - Snippet
+      security:
+      - oauth2:
+        - read:snippet
+  /v2/oauth/token:
+    post:
+      summary: Issue OAuth token
+      description: Generate an OAuth access token for machine-to-machine API access.
+      operationId: postOAuthToken
+      responses:
+        '422':
+          description: Request Validation Failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: validation-error
+                title: Request Validation Failed
+                status: 422
+                detail: One or more fields failed validation
+                errors:
+                - field: path.tenant_slug
+                  message: Validation failed
+                  type: validation_error
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthTokenResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-request
+                title: Bad Request
+                status: 400
+                detail: Malformed request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unauthorized
+                title: Unauthorized
+                status: 401
+                detail: Authentication required
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: internal-error
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+        '415':
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: unsupported-media-type
+                title: Application Error
+                status: 415
+                detail: Content-Type must be application/x-www-form-urlencoded
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: bad-gateway
+                title: Bad Gateway
+                status: 502
+                detail: Failed to communicate with external service
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: service-unavailable
+                title: Service Unavailable
+                status: 503
+                detail: Service temporarily unavailable
+      tags:
+      - OAuth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OAuthTokenFormRequest'
+components:
+  schemas:
+    APIResponse_CaseListResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/CaseListResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[CaseListResponse]
+    APIResponse_CaseSingleResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/CaseSingleResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[CaseSingleResponse]
+    APIResponse_EndUserAccountListResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountListResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountListResponse]
+    APIResponse_EndUserAccountResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountResponse]
+    APIResponse_EndUserAccountSingleResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountSingleResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountSingleResponse]
+    APIResponse_MetricListResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/MetricListResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[MetricListResponse]
+    APIResponse_SnippetResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/SnippetResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[SnippetResponse]
+    APIResponse_TenantAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantAuthSecretResponse]
+    APIResponse_TenantDetailsResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantDetailsResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantDetailsResponse]
+    APIResponse_TenantRotateAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantRotateAuthSecretResponse]
+    Aggregations:
+      type: string
+      enum:
+      - minute
+      - hour
+      - day
+      - week
+      - month
+      - quarter
+      - year
+      title: Aggregations
+    CaseDetails:
+      properties:
+        overall_risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Overall Risk Score
+          description: Aggregate risk score across all fraud signals, on a 1-5 scale
+            (1=lowest risk, 5=highest risk)
+          examples:
+          - 3
+          readOnly: true
+        fraud_labels:
+          items:
+            $ref: '#/components/schemas/FraudLabels'
+          type: array
+          minItems: 1
+          title: Fraud Labels
+          description: All fraud categories detected for this case; must contain at
+            least the `primary_fraud_label`
+          examples:
+          - - Account Takeover
+            - Bot
+          readOnly: true
+        primary_fraud_label:
+          $ref: '#/components/schemas/FraudLabels'
+          minLength: 1
+          description: Most significant fraud category for this case; always present
+            in `fraud_labels`
+          examples:
+          - Account Takeover
+          readOnly: true
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: Natural-language summary of the detected fraud signals; null
+            when no summary is available
+          examples:
+          - Account takeover attempt detected from suspicious IP
+          readOnly: true
+        highlights:
+          items:
+            type: string
+          type: array
+          title: Highlights
+          description: Short bullet points highlighting the strongest fraud signals
+            contributing to the score
+          examples:
+          - - Multiple failed login attempts
+            - IP from high-risk country
+          readOnly: true
+        recommended_action:
+          anyOf:
+          - $ref: '#/components/schemas/RecommendedAction'
+          - type: 'null'
+          description: 'Suggested response action: MONITOR, CHALLENGE, BLOCK, or ESCALATE'
+          default: BLOCK
+          examples:
+          - BLOCK
+          readOnly: true
+      type: object
+      required:
+      - overall_risk_score
+      - fraud_labels
+      - primary_fraud_label
+      - summary
+      title: CaseDetails
+    CaseListItemResponse:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+          description: Unique case identifier used in `/cases/{case_id}` paths
+          examples:
+          - case-abc123
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN`
+            when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the case was opened (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Current lifecycle status of the case (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        overall_risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Overall Risk Score
+          description: Aggregate risk score across all fraud signals, on a 1-5 scale
+            (1=lowest risk, 5=highest risk)
+          examples:
+          - 3
+          readOnly: true
+      type: object
+      required:
+      - case_id
+      - created_at
+      - status
+      - overall_risk_score
+      title: CaseListItemResponse
+    CaseListResponse:
+      properties:
+        cases:
+          items:
+            $ref: '#/components/schemas/CaseListItemResponse'
+          type: array
+          title: Cases
+          description: List of cases for the tenant
+          examples:
+          - - case_id: case-abc123
+              created_at: '2024-01-15T10:30:00Z'
+              overall_risk_score: 3
+              status: OPEN
+              website_account_id: account-abc123
+          readOnly: true
+      type: object
+      required:
+      - cases
+      title: CaseListResponse
+    CaseSingleResponse:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+          description: Unique case identifier used in `/cases/{case_id}` paths
+          examples:
+          - case-abc123
+          readOnly: true
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this case
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN`
+            when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+          readOnly: true
+        session_id:
+          type: string
+          title: Session Id
+          description: Identifier of the user session this case originated from
+          examples:
+          - a1b2c3d4-20240115-103500000
+          readOnly: true
+        unique_id:
+          type: string
+          format: uuid
+          title: Unique Id
+          description: Opaque record identifier; clients should use `case_id` for
+            all references
+          examples:
+          - 8f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b
+          readOnly: true
+        end_user_is_blocked:
+          type: boolean
+          title: End User Is Blocked
+          description: True when the end user account associated with this case is
+            blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Current lifecycle status of the case (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the case was opened (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+          description: Time of the most recent case update (RFC 3339 / ISO 8601 UTC);
+            null when the case has never been updated
+          examples:
+          - '2024-01-15T14:20:00Z'
+          readOnly: true
+        current_state:
+          anyOf:
+          - $ref: '#/components/schemas/CaseState'
+          - type: 'null'
+          description: Most recent state snapshot in the case lifecycle
+          examples:
+          - case_status: OPEN
+            changed_at: '2024-01-15T10:35:00Z'
+            changed_by: system
+            reason: Case created from model prediction
+            score: 4
+            session_status: ACTIVE
+            state_id: 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
+          readOnly: true
+        state_history:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CaseState'
+            type: array
+          - type: 'null'
+          title: State History
+          description: All prior state snapshots for this case ordered chronologically
+            (oldest first)
+          examples:
+          - - case_status: OPEN
+              changed_at: '2024-01-15T10:35:00Z'
+              changed_by: system
+              reason: Case created from model prediction
+              score: 4
+              session_status: ACTIVE
+              state_id: 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
+          readOnly: true
+        details:
+          $ref: '#/components/schemas/CaseDetails'
+          description: Fraud analysis output from the risk-scoring model (labels,
+            summary, recommended action)
+          examples:
+          - fraud_labels:
+            - Account Takeover
+            highlights:
+            - Multiple failed login attempts
+            - IP from high-risk country
+            overall_risk_score: 3
+            primary_fraud_label: Account Takeover
+            recommended_action: BLOCK
+            summary: Account takeover attempt detected from suspicious IP
+          readOnly: true
+        fraud_occurrences:
+          additionalProperties:
+            $ref: '#/components/schemas/DetailedFraudOccurrence'
+          type: object
+          title: Fraud Occurrences
+          description: Fraud occurrences for this case, keyed by `occurrence_id`.
+            Entries follow the detailed fraud occurrence shape.
+          examples:
+          - 15e341ed-6dae-4783-8647-32a7b7a8269a:
+              explanation:
+                fraud_reason: High velocity account creation
+                fraud_reason_description: The account was created very fast and may
+                  indicate a bot was used.
+                fraud_types:
+                - Bot Creation
+                model_behaviour:
+                - model_name: bos_session_aggregate_classifier
+                  top_contributors:
+                  - alignment: supporting
+                    description: Total number of events in the session
+                    direction: toward_fraud
+                    direction_specific: increases_BotActor_probability
+                    feature: total_event_count
+                    feature_value: 30
+                    impact_level: critical
+                    plain_name: Total Event Count
+                    shap_value: 1.151
+                  type: shap
+              generated_at: '2024-01-15T10:35:00Z'
+              occurrence_id: 15e341ed-6dae-4783-8647-32a7b7a8269a
+              prediction_id: pred_a1b2c3d4-20240115-103500000_2024-01-15T10:35:00Z
+              risk_score: 4
+              session_id: a1b2c3d4-20240115-103500000
+          readOnly: true
+      type: object
+      required:
+      - case_id
+      - tenant_id
+      - session_id
+      - unique_id
+      - end_user_is_blocked
+      - status
+      - created_at
+      - details
+      title: CaseSingleResponse
+    CaseState:
+      properties:
+        state_id:
+          type: string
+          format: uuid
+          title: State Id
+          description: Stable identifier for this state snapshot, unique within the
+            case
+          examples:
+          - 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
+          readOnly: true
+        case_status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Case lifecycle status captured by this snapshot (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        session_status:
+          $ref: '#/components/schemas/SessionStatus'
+          description: Status of the underlying user session at the time of this snapshot
+            (ACTIVE or FINISHED)
+          examples:
+          - ACTIVE
+          readOnly: true
+        score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Score
+          description: Risk score captured by this snapshot, on a 1-5 scale (1=lowest
+            risk, 5=highest risk)
+          examples:
+          - 4
+          readOnly: true
+        changed_at:
+          type: string
+          format: date-time
+          title: Changed At
+          description: Time this state change was recorded (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:35:00Z'
+          readOnly: true
+        changed_by:
+          type: string
+          minLength: 1
+          title: Changed By
+          description: Identifier of the actor that triggered this state change. Use
+            `system` for automated transitions; otherwise the user_id of the operator.
+          default: system
+          examples:
+          - system
+          readOnly: true
+        reason:
+          type: string
+          minLength: 1
+          title: Reason
+          description: Human-readable explanation of why the state changed
+          examples:
+          - Case created from model prediction
+          readOnly: true
+      type: object
+      required:
+      - state_id
+      - case_status
+      - session_status
+      - score
+      - changed_at
+      - reason
+      title: CaseState
+    CaseStatus:
+      type: string
+      enum:
+      - OPEN
+      - CLOSED
+      title: CaseStatus
+    CaseUpdateRequest:
+      properties:
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: New lifecycle status to apply to the case (OPEN or CLOSED)
+          examples:
+          - CLOSED
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      title: CaseUpdateRequest
+      examples:
+      - status: CLOSED
+    DetailedFraudOccurrence:
+      properties:
+        occurrence_id:
+          type: string
+          format: uuid
+          title: Occurrence Id
+          description: Stable identifier for this fraud occurrence within the case
+          examples:
+          - 15e341ed-6dae-4783-8647-32a7b7a8269a
+          readOnly: true
+        prediction_id:
+          type: string
+          minLength: 1
+          title: Prediction Id
+          description: Identifier of the model prediction that produced this occurrence
+          examples:
+          - pred_a1b2c3d4-20240115-103500000_2024-01-15T10:35:00Z
+          readOnly: true
+        session_id:
+          type: string
+          minLength: 1
+          title: Session Id
+          description: Identifier of the user session this occurrence was observed
+            in
+          examples:
+          - a1b2c3d4-20240115-103500000
+          readOnly: true
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+          description: Time the model produced this occurrence (RFC 3339 / ISO 8601
+            UTC)
+          examples:
+          - '2024-01-15T10:35:00Z'
+          readOnly: true
+        risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Risk Score
+          description: Risk score for this occurrence on a 1-5 scale (1=lowest risk,
+            5=highest risk)
+          examples:
+          - 4
+          readOnly: true
+        explanation:
+          $ref: '#/components/schemas/FraudExplanation'
+          description: Structured reasoning for why this occurrence was flagged
+          examples:
+          - fraud_reason: High velocity account creation
+            fraud_reason_description: The account was created very fast and may indicate
+              a bot was used.
+            fraud_types:
+            - Bot Creation
+            model_behaviour:
+            - model_name: bos_session_aggregate_classifier
+              top_contributors:
+              - alignment: supporting
+                description: Total number of events in the session
+                direction: toward_fraud
+                direction_specific: increases_BotActor_probability
+                feature: total_event_count
+                feature_value: 30
+                impact_level: critical
+                plain_name: Total Event Count
+                shap_value: 1.151
+              type: shap
+          readOnly: true
+      type: object
+      required:
+      - occurrence_id
+      - prediction_id
+      - session_id
+      - generated_at
+      - risk_score
+      - explanation
+      title: DetailedFraudOccurrence
+    EndUserAccountListItemResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the
+            tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC
+            3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountListItemResponse
+    EndUserAccountListResponse:
+      properties:
+        end_user_accounts:
+          items:
+            $ref: '#/components/schemas/EndUserAccountListItemResponse'
+          type: array
+          title: End User Accounts
+          description: List of end user accounts for the client
+          examples:
+          - - crm_account_id: crm-abc456
+              is_blocked: false
+              is_fraudulent: false
+              is_quarantined: false
+              last_session_updated_on: '2024-01-15T10:30:00Z'
+              tenant_id: 00000000-0000-4000-8000-000000000000
+              website_account_id: account-abc123
+          readOnly: true
+      type: object
+      required:
+      - end_user_accounts
+      title: EndUserAccountListResponse
+    EndUserAccountPostRequestModel:
+      properties:
+        tenant_id:
+          type: string
+          minLength: 1
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+        website_account_id:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN`
+            when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the
+            tenant's CRM system
+          examples:
+          - crm-abc456
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          default: false
+          examples:
+          - false
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC
+            3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_id
+      title: EndUserAccountPostRequestModel
+      examples:
+      - tenant_id: 00000000-0000-4000-8000-000000000000
+        website_account_id: account-abc123
+    EndUserAccountPutRequestModel:
+      properties:
+        crm_account_id:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the
+            tenant's CRM system
+          examples:
+          - crm-abc456
+        is_blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Blocked
+          description: Pass `true` to block the account from accessing services; omit
+            to leave unchanged
+          examples:
+          - false
+        is_quarantined:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Quarantined
+          description: Pass `true` to quarantine the account pending manual review;
+            omit to leave unchanged
+          examples:
+          - false
+        is_fraudulent:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Fraudulent
+          description: Pass `true` to mark the account as fraudulent; omit to leave
+            unchanged
+          examples:
+          - false
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC
+            3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+      additionalProperties: false
+      type: object
+      title: EndUserAccountPutRequestModel
+      examples:
+      - is_blocked: true
+    EndUserAccountResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the
+            tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC
+            3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountResponse
+    EndUserAccountSingleResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the
+            tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC
+            3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountSingleResponse
+    FraudExplanation:
+      properties:
+        fraud_reason:
+          type: string
+          minLength: 1
+          title: Fraud Reason
+          description: Short label naming the dominant fraud signal that triggered
+            this occurrence
+          examples:
+          - High velocity account creation
+          readOnly: true
+        fraud_reason_description:
+          type: string
+          minLength: 1
+          title: Fraud Reason Description
+          description: Full sentence describing the fraud signal in plain language
+          examples:
+          - The account was created very fast and may indicate a bot was used.
+          readOnly: true
+        fraud_types:
+          items:
+            $ref: '#/components/schemas/FraudTypes'
+          type: array
+          minItems: 1
+          title: Fraud Types
+          description: Categorical fraud types associated with this occurrence
+          examples:
+          - - Bot Creation
+          readOnly: true
+        model_behaviour:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ModelBehaviour'
+            type: array
+          - type: 'null'
+          title: Model Behaviour
+          description: Per-prediction model explainability records (e.g., SHAP attribution).
+            Each entry describes one model's feature contributions; null when unavailable.
+          examples:
+          - - model_name: bos_session_aggregate_classifier
+              top_contributors:
+              - alignment: supporting
+                description: Total number of events in the session
+                direction: toward_fraud
+                direction_specific: increases_BotActor_probability
+                feature: total_event_count
+                feature_value: 30
+                impact_level: critical
+                plain_name: Total Event Count
+                shap_value: 1.151
+              type: shap
+          readOnly: true
+      type: object
+      required:
+      - fraud_reason
+      - fraud_reason_description
+      - fraud_types
+      title: FraudExplanation
+    FraudLabels:
+      type: string
+      enum:
+      - Bot
+      - Synthetic
+      - Account Takeover
+      - Organic
+      title: FraudLabels
+    FraudTypes:
+      type: string
+      enum:
+      - Bot Creation
+      - Synthetic Fraud
+      - Account Takeover
+      - Organic Fraud
+      title: FraudTypes
+    MetricDataPoint:
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          title: Timestamp
+          description: Start of the aggregation bucket this data point covers (RFC
+            3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-01T00:00:00Z'
+          readOnly: true
+        total_events:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Total Events
+          description: Total events recorded in the bucket starting at `timestamp`
+          examples:
+          - 1250
+          readOnly: true
+        guest_sessions:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Guest Sessions
+          description: Sessions for unauthenticated users in the bucket starting at
+            `timestamp`
+          examples:
+          - 450
+          readOnly: true
+        non_guest_sessions:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Non Guest Sessions
+          description: Sessions for authenticated users in the bucket starting at
+            `timestamp`
+          examples:
+          - 800
+          readOnly: true
+        unique_sessions:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Unique Sessions
+          description: Distinct session identifiers seen in the bucket starting at
+            `timestamp`
+          examples:
+          - 1200
+          readOnly: true
+        unique_ids:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Unique Ids
+          description: Distinct end-user identifiers seen in the bucket starting at
+            `timestamp`
+          examples:
+          - 980
+          readOnly: true
+        session_starts:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Session Starts
+          description: Session-start events recorded in the bucket starting at `timestamp`
+          examples:
+          - 1150
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - timestamp
+      title: MetricDataPoint
+    MetricListResponse:
+      properties:
+        metrics:
+          items:
+            $ref: '#/components/schemas/MetricDataPoint'
+          type: array
+          title: Metrics
+          description: Array of time-series metric data points ordered by timestamp
+          examples:
+          - - guest_sessions: 450
+              non_guest_sessions: 800
+              session_starts: 1150
+              timestamp: '2024-01-01T00:00:00Z'
+              total_events: 1250
+              unique_ids: 980
+              unique_sessions: 1200
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - metrics
+      title: MetricListResponse
+    MetricsFields:
+      type: string
+      enum:
+      - timestamp
+      - total_events
+      - guest_sessions
+      - non_guest_sessions
+      - unique_sessions
+      - unique_ids
+      - session_starts
+      title: MetricsFields
+    ModelBehaviour:
+      properties:
+        type:
+          type: string
+          minLength: 1
+          title: Type
+          description: Attribution method type
+          examples:
+          - shap
+          readOnly: true
+        model_name:
+          type: string
+          minLength: 1
+          title: Model Name
+          description: Model that produced this attribution
+          examples:
+          - bos_session_aggregate_classifier
+          readOnly: true
+        top_contributors:
+          items:
+            $ref: '#/components/schemas/ShapContributor'
+          type: array
+          title: Top Contributors
+          description: Ranked feature contributions to the prediction
+          examples:
+          - - alignment: supporting
+              description: Total number of events in the session
+              direction: toward_fraud
+              direction_specific: increases_BotActor_probability
+              feature: total_event_count
+              feature_value: 30
+              impact_level: critical
+              plain_name: Total Event Count
+              shap_value: 1.151
+          readOnly: true
+      type: object
+      required:
+      - type
+      - model_name
+      title: ModelBehaviour
+    OAuthTokenResponse:
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          title: Access Token
+          description: 'JWT access token; send as `Authorization: Bearer <access_token>`
+            on subsequent API requests'
+          examples:
+          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
+          readOnly: true
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+          description: OAuth 2.0 token type; always `Bearer` for this API
+          examples:
+          - Bearer
+          readOnly: true
+        expires_in:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Expires In
+          description: Number of seconds until the access token expires, counted from
+            issuance
+          examples:
+          - 86400
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - access_token
+      - token_type
+      - expires_in
+      title: OAuthTokenResponse
+    ProblemDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
+          examples:
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive
+            data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request
+            ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    RecommendedAction:
+      type: string
+      enum:
+      - MONITOR
+      - CHALLENGE
+      - BLOCK
+      - ESCALATE
+      title: RecommendedAction
+    SessionStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - FINISHED
+      title: SessionStatus
+    ShapContributor:
+      properties:
+        feature:
+          type: string
+          minLength: 1
+          title: Feature
+          description: Machine-readable feature name used by the model
+          examples:
+          - total_event_count
+          readOnly: true
+        plain_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plain Name
+          description: Human-readable feature label for UI display
+          examples:
+          - Total Event Count
+          readOnly: true
+        feature_value:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: string
+          - type: boolean
+          - type: 'null'
+          title: Feature Value
+          description: Observed value of this feature for the scored session; null
+            when unavailable
+          examples:
+          - 30
+          readOnly: true
+        shap_value:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Shap Value
+          description: Raw signed SHAP value (positive = toward fraud, negative =
+            toward safe)
+          examples:
+          - 1.151
+          readOnly: true
+        direction:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Direction
+          description: Whether this feature pushed the prediction toward fraud or
+            away from it
+          examples:
+          - toward_fraud
+          readOnly: true
+        alignment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alignment
+          description: Whether this feature supports or contradicts the model's prediction
+          examples:
+          - supporting
+          readOnly: true
+        impact_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Impact Level
+          description: Importance bucket assigned to this feature
+          examples:
+          - critical
+          readOnly: true
+        direction_specific:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Direction Specific
+          description: Model-specific probability movement caused by this feature
+          examples:
+          - increases_BotActor_probability
+          readOnly: true
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Plain-language explanation of what the feature measures
+          examples:
+          - Total number of events in the session
+          readOnly: true
+      type: object
+      required:
+      - feature
+      title: ShapContributor
+    SnippetItem:
+      properties:
+        framework:
+          type: string
+          enum:
+          - HTML
+          - PlaceHolder
+          title: Framework
+          description: Target platform for the snippet. `HTML` is the browser script
+            tag; `PlaceHolder` is reserved for future native SDK targets.
+          examples:
+          - HTML
+          readOnly: true
+        snippet:
+          type: string
+          minLength: 1
+          title: Snippet
+          description: Drop-in integration snippet pre-configured with the tenant's
+            `app_id` and collector endpoint
+          examples:
+          - "<script src=\"https://cdn.example.com/clickstream-web.min.js\"></script>\n\
+            <script>\n    window.ClickstreamAnalytics.init({\n        appId: \"demo-retail_00000000000000000000000000000001\"\
+            ,\n        endpoint: \"https://collector.example.com\",\n        globalAttributes:\
+            \ {\n          tenant_id: \"00000000-0000-4000-8000-000000000000\"\n \
+            \       }\n    })\n</script>"
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - framework
+      - snippet
+      title: SnippetItem
+    SnippetResponse:
+      properties:
+        snippets:
+          items:
+            $ref: '#/components/schemas/SnippetItem'
+          type: array
+          minItems: 1
+          title: Snippets
+          description: Integration snippets, one per supported target platform
+          examples:
+          - - framework: HTML
+              snippet: "<script src=\"https://cdn.example.com/clickstream-web.min.js\"\
+                ></script>\n<script>\n    window.ClickstreamAnalytics.init({\n   \
+                \     appId: \"demo-retail_00000000000000000000000000000001\",\n \
+                \       endpoint: \"https://collector.example.com\",\n        globalAttributes:\
+                \ {\n          tenant_id: \"00000000-0000-4000-8000-000000000000\"\
+                \n        }\n    })\n</script>"
+          readOnly: true
+        tenant_name:
+          type: string
+          minLength: 1
+          title: Tenant Name
+          description: Tenant slug returned as tenant_name for compatibility
+          examples:
+          - demo-retail
+          readOnly: true
+        app_id:
+          type: string
+          minLength: 1
+          title: App Id
+          description: 'Clickstream application identifier embedded in the snippet
+            (format: `<tenant_slug>_<32-char-hex>`)'
+          examples:
+          - demo-retail_00000000000000000000000000000001
+          readOnly: true
+        tenant_id:
+          type: string
+          minLength: 1
+          format: uuid
+          title: Tenant Id
+          description: Tenant identifier sent as `globalAttributes.tenant_id` on every
+            clickstream event
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - snippets
+      - tenant_name
+      - app_id
+      - tenant_id
+      title: SnippetResponse
+    TenantAuthSecretResponse:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id`
+            when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        client_secret:
+          type: string
+          title: Client Secret
+          description: Current OAuth 2.0 client secret; send as `client_secret` (with
+            `client_id`) when requesting a token from `POST /v2/oauth/token`
+          examples:
+          - csec_example_7q9x2k4m6p8r0t1v3w5y
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: TenantAuthSecretResponse
+    TenantDetailsResponse:
+      properties:
+        tenant_name:
+          type: string
+          title: Tenant Name
+          description: Unique tenant slug returned as tenant_name for compatibility
+            (e.g. `/v2/{tenant_slug}/...`)
+          examples:
+          - demo-retail
+          readOnly: true
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Stable UUID identifier for the tenant, embedded in JWT claims
+            and downstream services
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id`
+            when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        clickstream_app_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Clickstream App Id
+          description: 'Clickstream application identifier injected into the tracking
+            snippet (format: `<tenant_slug>_<32-char-hex>`); null until provisioned'
+          examples:
+          - demo-retail_00000000000000000000000000000001
+          readOnly: true
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+          description: Time the tenant record was created (RFC 3339 / ISO 8601 UTC);
+            null for tenants created before this field was tracked
+          examples:
+          - '2026-03-10T14:32:00Z'
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_name
+      - tenant_id
+      - client_id
+      title: TenantDetailsResponse
+    TenantRotateAuthSecretResponse:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id`
+            when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        client_secret:
+          type: string
+          title: Client Secret
+          description: Newly issued OAuth 2.0 client secret; the previous secret is
+            invalidated immediately
+          examples:
+          - csec_example_9v1t0r8p6m4k2xq7y5w3
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: TenantRotateAuthSecretResponse
+    OAuthTokenFormRequest:
+      additionalProperties: false
+      examples:
+      - client_id: A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+        client_secret: csec_example_7q9x2k4m6p8r0t1v3w5y
+        grant_type: client_credentials
+      properties:
+        grant_type:
+          const: client_credentials
+          description: OAuth 2.0 grant type; must be `client_credentials`.
+          examples:
+          - client_credentials
+          title: Grant Type
+          type: string
+        client_id:
+          description: OAuth 2.0 client identifier issued for the tenant.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          maxLength: 100
+          minLength: 1
+          title: Client Id
+          type: string
+        client_secret:
+          description: OAuth 2.0 client secret paired with `client_id`.
+          examples:
+          - csec_example_7q9x2k4m6p8r0t1v3w5y
+          maxLength: 200
+          minLength: 1
+          title: Client Secret
+          type: string
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      title: OAuthTokenFormRequestModel
+      type: object
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: 'OAuth 2.0 client-credentials flow. Request a token from `POST
+        /v2/oauth/token` and send it as `Authorization: Bearer <access_token>`.'
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+          scopes:
+            create:enduseraccount: Create an end-user account
+            delete:enduseraccount: Delete an end-user account
+            read:case: Get a case
+            read:cases: List cases
+            read:enduseraccount: Get an end-user account
+            read:enduseraccounts: List end-user accounts
+            read:metrics: Get tenant metrics
+            read:snippet: Get integration snippets
+            read:tenant: Get tenant
+            read:tenant_auth_secret: Get tenant OAuth client credentials
+            update:case: Update a case
+            update:enduseraccount: Update an end-user account
+            update:tenant_auth_secret: Rotate tenant OAuth client secret
+tags:
+- name: Cases
+  description: Fraud case retrieval and updates.
+- name: End User Accounts
+  description: End-user account retrieval, creation, updates, and deletion.
+- name: Metrics
+  description: Aggregated tenant metrics and time-series reporting.
+- name: OAuth
+  description: OAuth token generation for machine-to-machine authentication.
+- name: Snippet
+  description: Tenant integration snippet retrieval.
+- name: Tenants
+  description: Tenant details and tenant authentication credentials.
+security:
+- oauth2: []

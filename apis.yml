@@ -1,20 +1,117 @@
 aid: urbanfox
 name: UrbanFox
-description: UrbanFox is a company surfaced as a portfolio company of techstars and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: UrbanFox is an AI-powered online payment fraud detection and prevention
+  platform that uses generative AI and behavioral intelligence - rather than static
+  rule-sets - to detect payment fraud, account takeover, and bot traffic across
+  transactions, sessions, and accounts. The Techstars-backed company ships a
+  tenant-scoped Customer API (OAuth 2.0 client credentials) for fraud case
+  management, end-user account management, activity metrics, credential rotation,
+  and clickstream collector integration.
 url: https://raw.githubusercontent.com/api-evangelist/urbanfox/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - techstars
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: real API surface found (docs.urbanfox.io + OpenAPI 3.1)
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
-- Company
-apis: []
+- Fraud Detection
+- Payment Fraud
+- Account Takeover
+- Bot Detection
+- Risk Management
+- Security
+- Artificial Intelligence
+- eCommerce
+image: https://www.urbanfox.io/hubfs/Favicon.png
+apis:
+- aid: urbanfox:urbanfox-cases-api
+  name: UrbanFox Cases API
+  description: Fraud case retrieval and updates.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - Cases
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-cases-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
+- aid: urbanfox:urbanfox-end-user-accounts-api
+  name: UrbanFox End User Accounts API
+  description: End-user account retrieval, creation, updates, and deletion.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - End User Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-end-user-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
+- aid: urbanfox:urbanfox-metrics-api
+  name: UrbanFox Metrics API
+  description: Aggregated tenant metrics and time-series reporting.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-metrics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
+- aid: urbanfox:urbanfox-oauth-api
+  name: UrbanFox OAuth API
+  description: OAuth token generation for machine-to-machine authentication.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - OAuth
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-oauth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
+- aid: urbanfox:urbanfox-snippet-api
+  name: UrbanFox Snippet API
+  description: Tenant integration snippet retrieval.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - Snippet
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-snippet-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
+- aid: urbanfox:urbanfox-tenants-api
+  name: UrbanFox Tenants API
+  description: Tenant details and tenant authentication credentials.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - Tenants
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-tenants-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -23,3 +120,57 @@ maintainers:
 common:
 - type: Website
   url: https://urbanfox.io/
+- type: DeveloperPortal
+  url: https://docs.urbanfox.io/
+- type: Documentation
+  url: https://docs.urbanfox.io/
+- type: APIReference
+  url: https://docs.urbanfox.io/api-reference
+- type: GettingStarted
+  url: https://docs.urbanfox.io/tutorials/first-api-call
+- type: Support
+  url: https://docs.urbanfox.io/support
+- type: PrivacyPolicy
+  url: https://www.urbanfox.io/privacy-policy
+- type: Pricing
+  url: https://www.urbanfox.io/
+  name: Plans (Free trial / Business / Enterprise) published on the homepage
+- type: SignUp
+  url: https://2ffr2z.share-eu1.hsforms.com/2wcLUdqqOSWOmGkVadK7V0g
+  name: Sign Up (homepage call-to-action form)
+- type: LLMsTxt
+  url: llms/urbanfox-llms.txt
+  name: Published at https://docs.urbanfox.io/llms.txt
+- type: Authentication
+  url: authentication/urbanfox-authentication.yml
+- type: OAuthScopes
+  url: scopes/urbanfox-scopes.yml
+- type: DomainSecurity
+  url: security/urbanfox-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/urbanfox-agentic-access.yml
+- type: MCPServer
+  url: mcp/urbanfox-mcp.yml
+  name: Candidate MCP tool surface derived from the OpenAPI (no official server)
+- type: Conformance
+  url: conformance/urbanfox-conformance.yml
+- type: ErrorCatalog
+  url: errors/urbanfox-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/urbanfox-lifecycle.yml
+- type: Conventions
+  url: conventions/urbanfox-conventions.yml
+- type: Components
+  url: components/urbanfox-components.yml
+- type: DataModel
+  url: data-model/urbanfox-data-model.yml
+- type: Packages
+  url: packages/urbanfox-packages.yml
+  name: Registry search record - no first-party SDKs published
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 21
+  pass: local-v1

@@ -1,0 +1,24 @@
+{
+  "provider": "urbanfox",
+  "sources": [
+    "urbanfox-cases-api-openapi.yml",
+    "urbanfox-end-user-accounts-api-openapi.yml",
+    "urbanfox-metrics-api-openapi.yml",
+    "urbanfox-oauth-api-openapi.yml",
+    "urbanfox-snippet-api-openapi.yml",
+    "urbanfox-tenants-api-openapi.yml"
+  ],
+  "outputs": [
+    "urbanfox-cases-api-openapi.yml",
+    "urbanfox-end-user-accounts-api-openapi.yml",
+    "urbanfox-metrics-api-openapi.yml",
+    "urbanfox-oauth-api-openapi.yml",
+    "urbanfox-snippet-api-openapi.yml",
+    "urbanfox-tenants-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

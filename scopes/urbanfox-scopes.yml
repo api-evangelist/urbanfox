@@ -1,0 +1,95 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/urbanfox-customer-api-openapi.yml
+docs: https://docs.urbanfox.io/explanation/authentication-model
+notes: 'Scopes follow the pattern action:resource and are additive; each protected
+  operation declares its required scope in its OAuth 2.0 security requirement, and
+  tokens missing the required scope receive a 403. Tokens are tenant-bound: a token
+  for one tenant slug cannot read or modify another tenant''s data.'
+schemes:
+- name: oauth2
+  source: openapi/urbanfox-customer-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+  description: 'OAuth 2.0 client-credentials flow. Request a token from `POST /v2/oauth/token`
+    and send it as `Authorization: Bearer <access_token>`.'
+scopes:
+- scope: create:enduseraccount
+  description: Create an end-user account
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: delete:enduseraccount
+  description: Delete an end-user account
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:case
+  description: Get a case
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:cases
+  description: List cases
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:enduseraccount
+  description: Get an end-user account
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:enduseraccounts
+  description: List end-user accounts
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:metrics
+  description: Get tenant metrics
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:snippet
+  description: Get integration snippets
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:tenant
+  description: Get tenant
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: read:tenant_auth_secret
+  description: Get tenant OAuth client credentials
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: update:case
+  description: Update a case
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: update:enduseraccount
+  description: Update an end-user account
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml
+- scope: update:tenant_auth_secret
+  description: Rotate tenant OAuth client secret
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml

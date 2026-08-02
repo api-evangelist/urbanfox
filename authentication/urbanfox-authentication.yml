@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/urbanfox-customer-api-openapi.yml
+docs: https://docs.urbanfox.io/how-to/authenticate
+notes: 'Machine-to-machine only: no static API keys. POST /v2/oauth/token follows
+  RFC 6749 client-credentials with an application/x-www-form-urlencoded body
+  (grant_type, client_id, client_secret); the response returns a Bearer JWT with
+  expires_in 86400 (24h). Credentials are per-tenant, and the tenant slug appears
+  in both the API host (api.{tenant_slug}.urbanfox.io) and the request path.
+  Credential rotation is supported without downtime via
+  POST /v2/{tenant_slug}/tenants/rotate-auth-secret
+  (docs: https://docs.urbanfox.io/how-to/rotate-auth-secret). 401 means expired/invalid
+  token (re-authenticate); 403 means missing scope or tenant mismatch.'
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.demo-retail.urbanfox.io/v2/oauth/token
+    scopes: 13
+  description: 'OAuth 2.0 client-credentials flow. Request a token from `POST /v2/oauth/token`
+    and send it as `Authorization: Bearer <access_token>`.'
+  sources:
+  - openapi/urbanfox-customer-api-openapi.yml

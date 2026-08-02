@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/urbanfox-customer-api-openapi.yml + docs.urbanfox.io
+standards:
+- id: oauth2
+  conforms: true
+  evidence: OpenAPI securitySchemes declares oauth2 clientCredentials; docs state
+    the token endpoint follows the OAuth 2.0 client-credentials standard (RFC 6749)
+    with form-encoded body (https://docs.urbanfox.io/how-to/authenticate).
+- id: oidc
+  conforms: false
+  evidence: No openIdConnect scheme; /.well-known/openid-configuration returns 404.
+- id: rfc7807-problem-details
+  conforms: true
+  evidence: Docs state every error response follows RFC 7807 Problem Details
+    (https://docs.urbanfox.io/how-to/handle-errors); OpenAPI ProblemDetail schema
+    carries type/title/status/detail/errors. Served as application/json rather
+    than application/problem+json.
+- id: rfc9457-problem-details
+  conforms: partial
+  evidence: RFC 7807 shape (predecessor of RFC 9457); media type is
+    application/json, not application/problem+json.
+- id: uri-path-versioning
+  conforms: true
+  evidence: Versioned via the URL path (/v2/...), stated in the OpenAPI info
+    description.
+- id: iso8601-dates
+  conforms: true
+  evidence: Metrics start_date/end_date documented as ISO 8601 timestamps
+    (https://docs.urbanfox.io/how-to/query-metrics).
+- id: pagination
+  conforms: false
+  evidence: List operations (getAllCases, getEndUserAccounts) expose filter
+    parameters only; no page/cursor/limit parameters in the OpenAPI.
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or idempotency contract anywhere in the
+    OpenAPI or docs.
+- id: scim
+  conforms: false
+  evidence: End-user account management uses a proprietary shape, not SCIM 2.0 paths.
+- id: json-api
+  conforms: false
+  evidence: Responses use a proprietary data envelope, not JSON:API media type.

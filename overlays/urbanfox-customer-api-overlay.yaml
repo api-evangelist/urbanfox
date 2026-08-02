@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for UrbanFox Customer API
+  version: 1.0.0
+x-generated: '2026-07-21'
+x-method: generated
+extends: openapi/urbanfox-customer-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      aid: urbanfox
+      profile: https://raw.githubusercontent.com/api-evangelist/urbanfox/refs/heads/main/apis.yml
+      docs: https://docs.urbanfox.io/
+      errors: RFC 7807 problem details served as application/json (type slugs like
+        item-not-found, validation-error)
+      auth: OAuth 2.0 client credentials, per-tenant; scopes follow action:resource
+- target: $.info
+  update:
+    x-agent-notes: 'Tenant slug appears twice: in the host (api.{tenant_slug}.urbanfox.io)
+      and in the path (/v2/{tenant_slug}/...). Use the same value in both. Token
+      endpoint expects application/x-www-form-urlencoded, not JSON.'
+- target: $.tags
+  update:
+  - name: Fraud Cases
+    description: Fraud case management (list, get, update/close)
+  - name: End-User Accounts
+    description: End-user account inspection, blocking, and linking
+  - name: Tenant
+    description: Tenant configuration and credential rotation
+  - name: Metrics
+    description: Aggregated tenant activity metrics
+  - name: Clickstream
+    description: Clickstream collector integration snippets

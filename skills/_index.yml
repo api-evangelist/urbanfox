@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/urbanfox-customer-api-openapi.yml + docs.urbanfox.io how-to guides
+skills:
+- file: urbanfox-authenticate-and-list-cases.md
+  name: Authenticate and list fraud cases
+  api: openapi/urbanfox-customer-api-openapi.yml
+  operations: [postOAuthToken, getAllCases]
+- file: urbanfox-investigate-and-close-case.md
+  name: Investigate and close a fraud case
+  api: openapi/urbanfox-customer-api-openapi.yml
+  operations: [getAllCases, getCase, putCase]
+- file: urbanfox-manage-end-user-accounts.md
+  name: Manage end-user accounts
+  api: openapi/urbanfox-customer-api-openapi.yml
+  operations: [getEndUserAccounts, getEndUserAccount, postEndUserAccount,
+    putEndUserAccount, deleteEndUserAccount]
+- file: urbanfox-query-metrics.md
+  name: Query tenant activity metrics
+  api: openapi/urbanfox-customer-api-openapi.yml
+  operations: [getMetricsAggregate]

@@ -1,0 +1,63 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.urbanfox.io/how-to/handle-errors
+spec: openapi/urbanfox-customer-api-openapi.yml
+format: rfc7807
+notes: Every error response follows RFC 7807 Problem Details, served as
+  application/json. Envelope fields are title, status, type, detail, errors. The
+  type field carries a short slug (not a URI) for programmatic handling; 422
+  responses populate errors[] with one {field, message} entry per invalid field,
+  while other statuses leave errors null.
+envelope:
+  fields: [title, status, type, detail, errors]
+  media_type: application/json
+  schema: openapi/urbanfox-customer-api-openapi.yml#/components/schemas/ProblemDetail
+problems:
+- status: 400
+  type: bad-request
+  title: Bad Request
+  remediation: Malformed request; check the body and parameters. Not all 400s are
+    validation errors - use the type field to distinguish.
+- status: 401
+  type: unauthorized
+  title: Unauthorized
+  remediation: Token is invalid or expired; re-authenticate via POST /v2/oauth/token.
+- status: 403
+  type: access-denied
+  title: Forbidden
+  remediation: Missing permission or tenant mismatch; check the scopes assigned to
+    your API credential and that the token matches the tenant slug in the URL.
+- status: 404
+  type: item-not-found
+  title: Not Found
+  remediation: The resource does not exist; verify the ID.
+- status: 409
+  type: item-already-exists
+  title: Conflict
+  remediation: Resource already exists; use a different ID or fetch the existing one.
+- status: 415
+  type: unsupported-media-type
+  title: Unsupported Media Type
+  remediation: Declared in the OpenAPI (e.g. the token endpoint requires
+    application/x-www-form-urlencoded). Send the required content type.
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#postOAuthToken
+- status: 422
+  type: validation-error
+  title: Validation Error
+  remediation: Request body failed schema validation; iterate errors[] for
+    field-specific {field, message} entries.
+- status: 500
+  type: internal-error
+  title: Internal Server Error
+  remediation: Retry with exponential backoff; report to support@urbanfox.io if
+    persistent.
+- status: 502
+  type: bad-gateway
+  title: Bad Gateway
+  remediation: Upstream dependency failed; retry after a short delay.
+- status: 503
+  type: service-unavailable
+  title: Service Unavailable
+  remediation: Declared in the OpenAPI on the token endpoint; retry after a short
+    delay.
+  source_operation: openapi/urbanfox-customer-api-openapi.yml#postOAuthToken

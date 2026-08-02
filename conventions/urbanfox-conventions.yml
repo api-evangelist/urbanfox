@@ -1,0 +1,51 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.urbanfox.io/ + openapi/urbanfox-customer-api-openapi.yml
+authentication:
+  style: OAuth 2.0 client-credentials (RFC 6749); Bearer JWT in the Authorization
+    header. No static API keys by design.
+  token_endpoint: POST /v2/oauth/token (application/x-www-form-urlencoded)
+  token_ttl_seconds: 86400
+  artifact: authentication/urbanfox-authentication.yml
+tenancy:
+  pattern: 'Tenant slug appears in both the host and the path:
+    https://api.{tenant_slug}.urbanfox.io/v2/{tenant_slug}/... Use the same value
+    in both positions. Tokens are tenant-bound; cross-tenant requests are rejected.'
+  docs: https://docs.urbanfox.io/explanation/tenancy-model
+idempotency:
+  supported: false
+  notes: No Idempotency-Key header or idempotency contract in the OpenAPI or docs.
+pagination:
+  style: none
+  notes: List endpoints (cases, end-user accounts) take filter parameters only
+    (status, website_account_id, user_is_blocked, is_blocked); no page/cursor/limit
+    parameters. Metrics windows are bounded by start_date/end_date with an
+    aggregation bucket parameter (minute max 7 days, hour max 90 days,
+    day/week/month/quarter/year unlimited).
+field_expansion:
+  supported: false
+  notes: No expand/sparse-field parameters. The metrics endpoint supports a
+    `metric` query parameter to return a single metric field per data point.
+response_envelope:
+  shape: 'Success responses wrap payloads in a `data` object (e.g. {"data":
+    {"snippets": [...]}}); errors use the RFC 7807 ProblemDetail shape.'
+errors:
+  format: RFC 7807 Problem Details served as application/json; type slugs for
+    programmatic handling; 422 carries errors[] of {field, message}.
+  artifact: errors/urbanfox-problem-types.yml
+request_tracing:
+  request_id: Support asks for "the request ID from the response headers" when
+    reporting issues (https://docs.urbanfox.io/support); the header name is not
+    documented in the OpenAPI.
+versioning:
+  scheme: uri-path (/v2/...)
+  artifact: lifecycle/urbanfox-lifecycle.yml
+rate_limits:
+  signaling: none documented
+  notes: No rate-limit headers or limits documented in the OpenAPI or docs as of
+    2026-07-21.
+retries:
+  guidance: Retry 500 with exponential backoff; retry 502 after a short delay;
+    treat 401 as a token-renewal signal (https://docs.urbanfox.io/how-to/handle-errors).
+dates:
+  format: ISO 8601 timestamps with timezone (e.g. 2024-01-01T00:00:00Z).

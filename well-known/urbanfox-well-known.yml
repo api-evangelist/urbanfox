@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: searched
+notes: Probe of the /.well-known/ discovery surface on every UrbanFox host. No
+  well-known documents are published; api.demo-retail.urbanfox.io is the example
+  tenant host from the OpenAPI servers template and does not resolve publicly
+  (per-tenant DNS). Absence recorded as valid data.
+hosts:
+- host: https://www.urbanfox.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://docs.urbanfox.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /llms.txt
+    status: 200
+    file: ../llms/urbanfox-llms.txt
+    note: llms.txt is published on the docs host (not a /.well-known/ path); saved
+      verbatim in llms/.
+- host: https://api.demo-retail.urbanfox.io
+  documents:
+  - path: /.well-known/security.txt
+    status: unresolvable
+  - path: /.well-known/openid-configuration
+    status: unresolvable
+  - path: /.well-known/oauth-authorization-server
+    status: unresolvable

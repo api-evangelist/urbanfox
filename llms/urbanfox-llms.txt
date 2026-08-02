@@ -1,0 +1,40 @@
+# UrbanFox
+
+> UrbanFox is a fraud detection and prevention platform. This file helps autonomous agents discover canonical public documentation and API endpoints.
+
+UrbanFox provides machine-to-machine APIs for authentication, fraud case management, end-user account management, clickstream integration, and activity metrics.
+
+## Developer Portal
+
+- [Overview](https://docs.urbanfox.io/): Entry point to the UrbanFox developer documentation
+- [Tutorials](https://docs.urbanfox.io/tutorials): Step-by-step learning guides for getting started with UrbanFox
+- [How-to Guides](https://docs.urbanfox.io/how-to): Goal-oriented guides for accomplishing specific tasks with the API
+- [API Reference](https://docs.urbanfox.io/api-reference): Interactive OpenAPI reference for the public UrbanFox API
+- [Explanation](https://docs.urbanfox.io/explanation): Concepts, architecture, and design rationale behind the UrbanFox platform
+- [Support](https://docs.urbanfox.io/support): How to get help with the UrbanFox platform
+
+## Tutorials
+
+- [Make your first API call](https://docs.urbanfox.io/tutorials/first-api-call): Get a token, list cases, and confirm the first response shape
+- [Review a sample case](https://docs.urbanfox.io/tutorials/sample-case-review): List cases, open one case, and read the main fields in a read-only workflow
+
+## How-to Guides
+
+- [Authenticate with the UrbanFox API](https://docs.urbanfox.io/how-to/authenticate): Obtain an M2M access token and make authenticated requests
+- [Rotate your tenant auth secret](https://docs.urbanfox.io/how-to/rotate-auth-secret): Replace tenant credentials without downtime
+- [Handle API errors](https://docs.urbanfox.io/how-to/handle-errors): Parse and act on RFC 7807 error responses
+- [Integrate clickstream tracking](https://docs.urbanfox.io/how-to/integrate-clickstream): Fetch snippet configuration and deploy tracking
+- [Investigate and close a fraud case](https://docs.urbanfox.io/how-to/investigate-and-close-case): Review risk details and close resolved cases
+- [Manage end-user accounts](https://docs.urbanfox.io/how-to/manage-end-user-accounts): Inspect, block, unblock, and link end-user accounts
+- [Query tenant metrics](https://docs.urbanfox.io/how-to/query-metrics): Retrieve activity metrics for a date range
+
+## Explanation
+
+- [Product Architecture](https://docs.urbanfox.io/explanation/product-architecture): High-level UrbanFox platform architecture for integrators
+- [Tenancy Model](https://docs.urbanfox.io/explanation/tenancy-model): How UrbanFox isolates data between tenants
+- [Authentication Model](https://docs.urbanfox.io/explanation/authentication-model): How tokens and scopes secure API access
+- [Event Data Model](https://docs.urbanfox.io/explanation/event-data-model): How UrbanFox captures and structures clickstream events
+
+## API Endpoints
+
+- [API Reference](https://docs.urbanfox.io/api-reference): Interactive OpenAPI reference for the public UrbanFox API

@@ -1,0 +1,22 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.urbanfox.io/how-to/integrate-clickstream
+notes: UrbanFox ships one client-side embeddable surface - the Clickstream
+  Analytics web collector - deployed on customer websites (typically via Google
+  Tag Manager) to feed behavioral fraud detection. Distinct from server-side SDKs
+  (none published).
+families:
+- family: Clickstream Analytics collector
+  kind: browser-script
+  loader: clickstream-web.min.js (CloudFront-hosted script returned per-tenant by
+    the GET /v2/{tenant_slug}/snippet endpoint)
+  global: window.ClickstreamAnalytics
+  api:
+  - ClickstreamAnalytics.init({appId, endpoint, globalAttributes})
+  - ClickstreamAnalytics.record({name, attributes})
+  - ClickstreamAnalytics.setUserId(userId | null)
+  deployment: Google Tag Manager Custom HTML tags on an Initialization - All Pages
+    trigger; login/logout identity wiring via dataLayer events userLogin/userLogout.
+  config_source: openapi/urbanfox-customer-api-openapi.yml#getSnippet (returns
+    snippet, app_id, tenant_id; requires read:snippet scope)
+  docs: https://docs.urbanfox.io/how-to/integrate-clickstream
