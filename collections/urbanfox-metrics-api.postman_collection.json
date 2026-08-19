@@ -1,0 +1,704 @@
+{
+  "item": [
+    {
+      "id": "d19f0c42-f3bf-4fa5-a36b-e37711298ca7",
+      "name": "Metrics",
+      "description": {
+        "content": "Aggregated tenant metrics and time-series reporting.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5d0f406d-1dc1-4d07-bbba-3b65be9be075",
+          "name": "Get tenant metrics",
+          "request": {
+            "name": "Get tenant metrics",
+            "description": {
+              "content": "Retrieve tenant activity metrics for a selected date range.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<dateTime>",
+                  "description": "(Required) Inclusive start of the metrics query window (RFC 3339 / ISO 8601 UTC, milliseconds optional)."
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>",
+                  "description": "(Required) Exclusive end of the metrics query window (RFC 3339 / ISO 8601 UTC, milliseconds optional). Events at exactly `end_date` are not included; must be strictly greater than `start_date`."
+                },
+                {
+                  "disabled": false,
+                  "key": "aggregation",
+                  "value": "<string>",
+                  "description": "Time bucket size for the returned series. Omit to receive raw, non-aggregated data points. When set, the response includes a data point for every interval in `[start_date, end_date)` (half-open: `start_date` inclusive, `end_date` exclusive), filling missing intervals with zero values. Range limits: `minute` requires `end_date - start_date <= 7 days`; `hour` requires `end_date - start_date <= 90 days`; `day`, `week`, `month`, `quarter`, `year` have no explicit limit."
+                },
+                {
+                  "disabled": false,
+                  "key": "metric",
+                  "value": "<string>",
+                  "description": "Specific metric to return (`timestamp`, `total_events`, `guest_sessions`, `non_guest_sessions`, `unique_sessions`, `unique_ids`, `session_starts`). Omit to receive every metric for each data point."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "75474ca5-f253-4779-bcfa-36df91cbeef7",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"metrics\": [\n      {\n        \"guest_sessions\": 450,\n        \"non_guest_sessions\": 800,\n        \"session_starts\": 1150,\n        \"timestamp\": \"2024-01-01T00:00:00Z\",\n        \"total_events\": 1250,\n        \"unique_ids\": 980,\n        \"unique_sessions\": 1200\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84e7310f-6dbd-4f57-b869-0dabec30d611",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f8f61a4-26f7-4c53-b82c-e3b04cb863a1",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71457a1d-a677-40bf-ad4c-9df4116921b8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbb21e3d-d912-4e85-bd35-d46bd5dc5caf",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"Tenant not found with name: demo-retail\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70c0b851-fae5-44b9-a529-31ad5d0c22f1",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"query.start_date\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80098fd3-3d5c-4955-bbb9-05387c63304f",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72802b42-92ac-492e-b152-27687b0b3eef",
+              "name": "Bad Gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01T00:00:00Z"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-01-31T23:59:59Z"
+                    },
+                    {
+                      "key": "aggregation",
+                      "value": "month"
+                    },
+                    {
+                      "key": "metric",
+                      "value": "non_guest_sessions"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-gateway\",\n  \"title\": \"Bad Gateway\",\n  \"status\": 502,\n  \"detail\": \"Failed to communicate with external service\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Tenant DNS slug (lowercase, hyphenated).",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "demo-retail",
+      "key": "tenant_slug"
+    },
+    {
+      "type": "string",
+      "value": "https://api.{{tenant_slug}}.urbanfox.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "671e6223-a572-4da9-84a7-7a794d4f6762",
+    "name": "UrbanFox Customer Cases Metrics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant\nmetrics, and machine-to-machine credentials.\n\n## Authentication\n\nJWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.\n\n## Authorization\n\nEach protected operation declares its required scope in its OAuth 2.0 security requirement.\nTokens missing the required scope receive a `403`.\n\n## Versioning\n\nVersioned via the URL path (`/v2/...`).\n\n\nContact Support:\n Name: UrbanFox",
+      "type": "text/plain"
+    }
+  }
+}

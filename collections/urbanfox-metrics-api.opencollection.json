@@ -1,0 +1,81 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UrbanFox Customer Cases Metrics API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get tenant metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/metrics",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Inclusive start of the metrics query window (RFC 3339 / ISO 8601 UTC, milliseconds optional)."
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "Exclusive end of the metrics query window (RFC 3339 / ISO 8601 UTC, milliseconds optional). Events at exactly `end_date` are not included; must be strictly greater than `start_date`."
+              },
+              {
+                "name": "aggregation",
+                "value": "",
+                "type": "query",
+                "description": "Time bucket size for the returned series. Omit to receive raw, non-aggregated data points. When set, the response includes a data point for every interval in `[start_date, end_date)` (half-open: `start_date` inclusive, `end_date` exclusive), filling missing intervals with zero values. Range limits: `minute` requires `end_date - start_date <= 7 days`; `hour` requires `end_date - start_date <= 90 days`; `day`, `week`, `month`, `quarter`, `year` have no explicit limit."
+              },
+              {
+                "name": "metric",
+                "value": "",
+                "type": "query",
+                "description": "Specific metric to return (`timestamp`, `total_events`, `guest_sessions`, `non_guest_sessions`, `unique_sessions`, `unique_ids`, `session_starts`). Omit to receive every metric for each data point."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve tenant activity metrics for a selected date range."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

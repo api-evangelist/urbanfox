@@ -1,0 +1,113 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UrbanFox Customer Cases Tenants API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tenants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get tenant",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/tenants",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve tenant identifiers and integration configuration."
+        },
+        {
+          "info": {
+            "name": "Get tenant OAuth client credentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/tenants/auth-secret",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve the current OAuth client credentials for a tenant."
+        },
+        {
+          "info": {
+            "name": "Rotate tenant OAuth client secret",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/tenants/rotate-auth-secret",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Rotate a tenant OAuth client secret and return the new credentials."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

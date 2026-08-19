@@ -1,0 +1,201 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UrbanFox Customer Cases End User Accounts API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "End User Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an end-user account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/enduseraccounts/:website_account_id",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "website_account_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve details for a single end-user account."
+        },
+        {
+          "info": {
+            "name": "Update an end-user account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/enduseraccounts/:website_account_id",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "website_account_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update mutable fields for an end-user account."
+        },
+        {
+          "info": {
+            "name": "Delete an end-user account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/enduseraccounts/:website_account_id",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "website_account_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Delete an end-user account and related account state."
+        },
+        {
+          "info": {
+            "name": "List end-user accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/enduseraccounts",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "is_blocked",
+                "value": "",
+                "type": "query",
+                "description": "Filter end-user accounts by whether they are blocked from accessing services."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List end-user accounts for a tenant, optionally filtered by block status."
+        },
+        {
+          "info": {
+            "name": "Create an end-user account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/enduseraccounts",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Create an end-user account for a tenant."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

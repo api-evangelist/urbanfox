@@ -1,0 +1,147 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "UrbanFox Customer Cases API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "oauth2",
+      "flow": "client_credentials",
+      "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+      "credentials": {
+        "clientId": "{{clientId}}",
+        "clientSecret": "{{clientSecret}}"
+      }
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a case",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/cases/:case_id",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique case identifier returned by `GET /cases`."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve full details for a single fraud case."
+        },
+        {
+          "info": {
+            "name": "Update a case",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/cases/:case_id",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "case_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique case identifier returned by `GET /cases`."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Update the status of a fraud case."
+        },
+        {
+          "info": {
+            "name": "List cases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.{tenant_slug}.urbanfox.io/v2/:tenant_slug/cases",
+            "params": [
+              {
+                "name": "tenant_slug",
+                "value": "",
+                "type": "path",
+                "description": "Tenant DNS slug (lowercase letters, digits, and hyphens; 3-100 characters)."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter cases by lifecycle status (`OPEN` or `CLOSED`). Omit to return cases in every status."
+              },
+              {
+                "name": "website_account_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter cases by the end-user account they originated from."
+              },
+              {
+                "name": "user_is_blocked",
+                "value": "",
+                "type": "query",
+                "description": "Filter cases by whether the associated end-user account is blocked."
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.demo-retail.urbanfox.io/v2/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "List fraud cases for a tenant, optionally filtered by account or status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,2586 @@
+{
+  "item": [
+    {
+      "id": "01161c07-08c5-43fa-b95e-ffc317e76586",
+      "name": "End User Accounts",
+      "description": {
+        "content": "End-user account retrieval, creation, updates, and deletion.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "27632ff4-dbb6-48bb-8200-f2d0fa4a9c0a",
+          "name": "Get an end-user account",
+          "request": {
+            "name": "Get an end-user account",
+            "description": {
+              "content": "Retrieve details for a single end-user account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "enduseraccounts",
+                ":website_account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "website_account_id",
+                  "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2c497a80-387b-40ec-9659-eea4d64107dc",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n    \"website_account_id\": \"account-abc123\",\n    \"is_blocked\": false,\n    \"crm_account_id\": \"string\",\n    \"is_quarantined\": false,\n    \"is_fraudulent\": false,\n    \"last_session_updated_on\": \"1987-04-08T09:14:09.022Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4396922a-aea0-4af3-b790-be62c98616d9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8413ec8f-73b7-4b51-80f4-30836290baa2",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d03c0982-a6ad-4ee6-a7ce-56b52a487c69",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3ae32a5-a754-41da-9e7a-2fe585506fc9",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"End User Account not found with ID: account-abc123 for client 'demo-retail'\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84e3b915-a0ab-42e3-bd55-d3da196a60bc",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"path.website_account_id\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9be518f-d0d4-4c21-81d9-73b4cf19c8a3",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b667ecc-9a3a-4257-9fe5-b36cbd4dbf2b",
+          "name": "Update an end-user account",
+          "request": {
+            "name": "Update an end-user account",
+            "description": {
+              "content": "Update mutable fields for an end-user account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "enduseraccounts",
+                ":website_account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "website_account_id",
+                  "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"crm_account_id\": \"<string>\",\n  \"is_blocked\": \"<boolean>\",\n  \"is_quarantined\": \"<boolean>\",\n  \"is_fraudulent\": \"<boolean>\",\n  \"last_session_updated_on\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "24aa97b8-2a7c-4ab0-a9de-3cbc9b70452a",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n    \"website_account_id\": \"account-abc123\",\n    \"is_blocked\": false,\n    \"crm_account_id\": \"string\",\n    \"is_quarantined\": false,\n    \"is_fraudulent\": false,\n    \"last_session_updated_on\": \"1987-04-08T09:14:09.022Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acdf956a-6036-4495-8991-9d1260b164c5",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "978c0f1b-cfbf-487c-ab25-a4896c92b32e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e57ef5df-3f71-4981-99b8-4f9410acf0d5",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecfb39b4-9769-4330-b3a2-02bde9860f15",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"End User Account not found with ID: account-abc123\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02a7d6d5-b898-49d0-8a47-a5b24d9dab12",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"body.crm_account_id\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1505ecb-77b2-43ec-a3bd-8703ee9cc4d5",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_blocked\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2f5a24d-89ff-4fb0-ad17-44a2ca233fb9",
+          "name": "Delete an end-user account",
+          "request": {
+            "name": "Delete an end-user account",
+            "description": {
+              "content": "Delete an end-user account and related account state.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "enduseraccounts",
+                ":website_account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "website_account_id",
+                  "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6610469d-fbbc-4336-aeab-fe1375f0bb58",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6662b533-4161-492f-96b7-8d4bf4a5dd30",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a314f735-162d-4e22-9a65-22f1959bfa63",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f5af601-a83d-4d46-b84b-4042336bb76d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd7d699d-1ed5-483d-9409-f4f8c4aec22e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"End User Account not found with ID: account-abc123\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db087fbb-10bc-4a30-9d86-f0dcb74ae6a7",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"path.website_account_id\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67aefd00-ea54-408a-9528-edcb0135f0c6",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts",
+                    ":website_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "website_account_id",
+                      "description": "(Required) Identifier of the end-user's website account; the literal string `UNKNOWN` addresses accounts whose website identifier could not be resolved."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cba6e77f-e5cb-4f84-962a-217d36f371ba",
+          "name": "List end-user accounts",
+          "request": {
+            "name": "List end-user accounts",
+            "description": {
+              "content": "List end-user accounts for a tenant, optionally filtered by block status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "enduseraccounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "is_blocked",
+                  "value": "<boolean>",
+                  "description": "Filter end-user accounts by whether they are blocked from accessing services."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "66c444a7-5731-4a22-81da-b4b260c7d8b3",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"end_user_accounts\": [\n      {\n        \"crm_account_id\": \"crm-abc456\",\n        \"is_blocked\": false,\n        \"is_fraudulent\": false,\n        \"is_quarantined\": false,\n        \"last_session_updated_on\": \"2024-01-15T10:30:00Z\",\n        \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n        \"website_account_id\": \"account-abc123\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51cd3174-e22b-4f09-af7c-bcdae62428b8",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ab9cd7b-5a44-4737-9300-1cf542268aea",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "18e4b56a-27b4-4a4d-9a73-7e5924daa5d8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24812d48-62f0-44ea-af1c-1609247b9e97",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"Tenant not found with name: demo-retail\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f1d1294-e3f3-4c83-bf08-e3d09dedaa97",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"query.is_blocked\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63281e24-f425-4a91-8fbe-3763508213cd",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "965dc8da-5e89-4f1f-a1de-5a1443aecb0c",
+          "name": "Create an end-user account",
+          "request": {
+            "name": "Create an end-user account",
+            "description": {
+              "content": "Create an end-user account for a tenant.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "enduseraccounts"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tenant_id\": \"<uuid>\",\n  \"website_account_id\": \"UNKNOWN\",\n  \"crm_account_id\": \"<string>\",\n  \"is_blocked\": false,\n  \"is_quarantined\": false,\n  \"is_fraudulent\": false,\n  \"last_session_updated_on\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b32abe96-c686-4446-9537-3741f0cfb2a5",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n    \"website_account_id\": \"account-abc123\",\n    \"is_blocked\": false,\n    \"crm_account_id\": \"string\",\n    \"is_quarantined\": false,\n    \"is_fraudulent\": false,\n    \"last_session_updated_on\": \"1957-07-12T19:29:41.446Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24d988f4-dac1-45fa-ba5e-416f41bb4e77",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4b83aebd-e0d5-43f1-843e-a40312bc7717",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "291f0c08-26ac-4c4f-a890-e5a16819e645",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7417fd7-35fd-4022-b07e-bbdabdc797dd",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-already-exists\",\n  \"title\": \"Application Error\",\n  \"status\": 409,\n  \"detail\": \"End User Account 'account-abc123' already exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a195f67-1f6c-499d-9720-83679ffd9a78",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"body.website_account_id\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7734c443-ab3c-4b0e-9d6f-02692febcff5",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "enduseraccounts"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n  \"website_account_id\": \"account-abc123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Tenant DNS slug (lowercase, hyphenated).",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "demo-retail",
+      "key": "tenant_slug"
+    },
+    {
+      "type": "string",
+      "value": "https://api.{{tenant_slug}}.urbanfox.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9c5eab21-2982-40c1-bc1b-b2238b283b8b",
+    "name": "UrbanFox Customer Cases End User Accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant\nmetrics, and machine-to-machine credentials.\n\n## Authentication\n\nJWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.\n\n## Authorization\n\nEach protected operation declares its required scope in its OAuth 2.0 security requirement.\nTokens missing the required scope receive a `403`.\n\n## Versioning\n\nVersioned via the URL path (`/v2/...`).\n\n\nContact Support:\n Name: UrbanFox",
+      "type": "text/plain"
+    }
+  }
+}

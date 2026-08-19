@@ -1,0 +1,1661 @@
+{
+  "item": [
+    {
+      "id": "1057a0c6-681f-4ed6-9b0c-e11bd237bcec",
+      "name": "Cases",
+      "description": {
+        "content": "Fraud case retrieval and updates.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f9869018-a2fe-4ae2-bec1-a3384089c6bb",
+          "name": "Get a case",
+          "request": {
+            "name": "Get a case",
+            "description": {
+              "content": "Retrieve full details for a single fraud case.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "cases",
+                ":case_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "case_id",
+                  "description": "(Required) Unique case identifier returned by `GET /cases`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a3a0a709-9ef8-4b55-a495-502ceb017193",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"case_id\": \"case-abc123\",\n    \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n    \"session_id\": \"a1b2c3d4-20240115-103500000\",\n    \"unique_id\": \"8f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b\",\n    \"end_user_is_blocked\": false,\n    \"status\": \"OPEN\",\n    \"created_at\": \"2024-01-15T10:30:00Z\",\n    \"details\": {\n      \"fraud_labels\": [\n        \"Account Takeover\"\n      ],\n      \"highlights\": [\n        \"Multiple failed login attempts\",\n        \"IP from high-risk country\"\n      ],\n      \"overall_risk_score\": 3,\n      \"primary_fraud_label\": \"Account Takeover\",\n      \"recommended_action\": \"BLOCK\",\n      \"summary\": \"Account takeover attempt detected from suspicious IP\"\n    },\n    \"website_account_id\": \"account-abc123\",\n    \"updated_at\": \"2004-03-31T02:03:48.986Z\",\n    \"current_state\": {\n      \"state_id\": \"7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11\",\n      \"case_status\": \"OPEN\",\n      \"session_status\": \"ACTIVE\",\n      \"score\": 4,\n      \"changed_at\": \"2024-01-15T10:35:00Z\",\n      \"reason\": \"Case created from model prediction\",\n      \"changed_by\": \"system\"\n    },\n    \"state_history\": [\n      {\n        \"state_id\": \"7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11\",\n        \"case_status\": \"OPEN\",\n        \"session_status\": \"ACTIVE\",\n        \"score\": 4,\n        \"changed_at\": \"2024-01-15T10:35:00Z\",\n        \"reason\": \"Case created from model prediction\",\n        \"changed_by\": \"system\"\n      },\n      {\n        \"state_id\": \"7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11\",\n        \"case_status\": \"OPEN\",\n        \"session_status\": \"ACTIVE\",\n        \"score\": 4,\n        \"changed_at\": \"2024-01-15T10:35:00Z\",\n        \"reason\": \"Case created from model prediction\",\n        \"changed_by\": \"system\"\n      }\n    ],\n    \"fraud_occurrences\": {\n      \"15e341ed-6dae-4783-8647-32a7b7a8269a\": {\n        \"explanation\": {\n          \"fraud_reason\": \"High velocity account creation\",\n          \"fraud_reason_description\": \"The account was created very fast and may indicate a bot was used.\",\n          \"fraud_types\": [\n            \"Bot Creation\"\n          ],\n          \"model_behaviour\": [\n            {\n              \"model_name\": \"bos_session_aggregate_classifier\",\n              \"top_contributors\": [\n                {\n                  \"alignment\": \"supporting\",\n                  \"description\": \"Total number of events in the session\",\n                  \"direction\": \"toward_fraud\",\n                  \"direction_specific\": \"increases_BotActor_probability\",\n                  \"feature\": \"total_event_count\",\n                  \"feature_value\": 30,\n                  \"impact_level\": \"critical\",\n                  \"plain_name\": \"Total Event Count\",\n                  \"shap_value\": 1.151\n                }\n              ],\n              \"type\": \"shap\"\n            }\n          ]\n        },\n        \"generated_at\": \"2024-01-15T10:35:00Z\",\n        \"occurrence_id\": \"15e341ed-6dae-4783-8647-32a7b7a8269a\",\n        \"prediction_id\": \"pred_a1b2c3d4-20240115-103500000_2024-01-15T10:35:00Z\",\n        \"risk_score\": 4,\n        \"session_id\": \"a1b2c3d4-20240115-103500000\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b2e14b9-b91c-4c04-a341-1e667e2c4975",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3cd983f0-5e96-41e2-a1e2-50a38842a72c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a26fc282-ae8b-4b35-9504-1263dcd8ed07",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9dde3b01-f2ba-43ff-b6ec-a2cfb591fd57",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"Case not found with ID: case-abc123\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44e036b2-819a-4f18-9b8d-4317dd58162f",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"path.case_id\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b42f151-9690-4641-a8b4-8e3f76f97edf",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "74c610aa-f9de-4237-999d-16099fc0223e",
+          "name": "Update a case",
+          "request": {
+            "name": "Update a case",
+            "description": {
+              "content": "Update the status of a fraud case.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "cases",
+                ":case_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "case_id",
+                  "description": "(Required) Unique case identifier returned by `GET /cases`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "065f56e4-efd0-4838-a558-26e9c46a851c",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"case_id\": \"case-abc123\",\n    \"tenant_id\": \"00000000-0000-4000-8000-000000000000\",\n    \"session_id\": \"a1b2c3d4-20240115-103500000\",\n    \"unique_id\": \"8f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b\",\n    \"end_user_is_blocked\": false,\n    \"status\": \"OPEN\",\n    \"created_at\": \"2024-01-15T10:30:00Z\",\n    \"details\": {\n      \"fraud_labels\": [\n        \"Account Takeover\"\n      ],\n      \"highlights\": [\n        \"Multiple failed login attempts\",\n        \"IP from high-risk country\"\n      ],\n      \"overall_risk_score\": 3,\n      \"primary_fraud_label\": \"Account Takeover\",\n      \"recommended_action\": \"BLOCK\",\n      \"summary\": \"Account takeover attempt detected from suspicious IP\"\n    },\n    \"website_account_id\": \"account-abc123\",\n    \"updated_at\": \"2004-03-31T02:03:48.986Z\",\n    \"current_state\": {\n      \"state_id\": \"7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11\",\n      \"case_status\": \"OPEN\",\n      \"session_status\": \"ACTIVE\",\n      \"score\": 4,\n      \"changed_at\": \"2024-01-15T10:35:00Z\",\n      \"reason\": \"Case created from model prediction\",\n      \"changed_by\": \"system\"\n    },\n    \"state_history\": [\n      {\n        \"state_id\": \"7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11\",\n        \"case_status\": \"OPEN\",\n        \"session_status\": \"ACTIVE\",\n        \"score\": 4,\n        \"changed_at\": \"2024-01-15T10:35:00Z\",\n        \"reason\": \"Case created from model prediction\",\n        \"changed_by\": \"system\"\n      },\n      {\n        \"state_id\": \"7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11\",\n        \"case_status\": \"OPEN\",\n        \"session_status\": \"ACTIVE\",\n        \"score\": 4,\n        \"changed_at\": \"2024-01-15T10:35:00Z\",\n        \"reason\": \"Case created from model prediction\",\n        \"changed_by\": \"system\"\n      }\n    ],\n    \"fraud_occurrences\": {\n      \"15e341ed-6dae-4783-8647-32a7b7a8269a\": {\n        \"explanation\": {\n          \"fraud_reason\": \"High velocity account creation\",\n          \"fraud_reason_description\": \"The account was created very fast and may indicate a bot was used.\",\n          \"fraud_types\": [\n            \"Bot Creation\"\n          ],\n          \"model_behaviour\": [\n            {\n              \"model_name\": \"bos_session_aggregate_classifier\",\n              \"top_contributors\": [\n                {\n                  \"alignment\": \"supporting\",\n                  \"description\": \"Total number of events in the session\",\n                  \"direction\": \"toward_fraud\",\n                  \"direction_specific\": \"increases_BotActor_probability\",\n                  \"feature\": \"total_event_count\",\n                  \"feature_value\": 30,\n                  \"impact_level\": \"critical\",\n                  \"plain_name\": \"Total Event Count\",\n                  \"shap_value\": 1.151\n                }\n              ],\n              \"type\": \"shap\"\n            }\n          ]\n        },\n        \"generated_at\": \"2024-01-15T10:35:00Z\",\n        \"occurrence_id\": \"15e341ed-6dae-4783-8647-32a7b7a8269a\",\n        \"prediction_id\": \"pred_a1b2c3d4-20240115-103500000_2024-01-15T10:35:00Z\",\n        \"risk_score\": 4,\n        \"session_id\": \"a1b2c3d4-20240115-103500000\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9392374-88a0-4c95-b32b-a3b0f3ab4a03",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56cca595-e429-48f0-a4cc-a70c961bf445",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df61858f-cbda-4dd8-86bd-5f6cff5a30f2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da8df04f-d2ef-43a9-b4e3-f83bd7b46384",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"Case not found with ID: case-abc123\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1497d093-964f-4472-92f7-ae7bc17f17c4",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"body.status\",\n      \"message\": \"Input should be 'OPEN' or 'CLOSED'\",\n      \"type\": \"enum\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "804de96c-e1a0-4826-a1ad-87b04908d8c1",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases",
+                    ":case_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "case_id",
+                      "description": "(Required) Unique case identifier returned by `GET /cases`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"CLOSED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d734d3b9-6f6b-43b3-be5b-9ef804ad7d38",
+          "name": "List cases",
+          "request": {
+            "name": "List cases",
+            "description": {
+              "content": "List fraud cases for a tenant, optionally filtered by account or status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                ":tenant_slug",
+                "cases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter cases by lifecycle status (`OPEN` or `CLOSED`). Omit to return cases in every status."
+                },
+                {
+                  "disabled": false,
+                  "key": "website_account_id",
+                  "value": "<string>",
+                  "description": "Filter cases by the end-user account they originated from."
+                },
+                {
+                  "disabled": false,
+                  "key": "user_is_blocked",
+                  "value": "<boolean>",
+                  "description": "Filter cases by whether the associated end-user account is blocked."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "{{tenant_slug}}",
+                  "key": "tenant_slug",
+                  "description": "Tenant DNS slug (lowercase, hyphenated)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "31eb0b1a-b40d-4db3-a305-469c6b2d5d6e",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"cases\": [\n      {\n        \"case_id\": \"case-abc123\",\n        \"created_at\": \"2024-01-15T10:30:00Z\",\n        \"overall_risk_score\": 3,\n        \"status\": \"OPEN\",\n        \"website_account_id\": \"account-abc123\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b289440d-8e5e-4743-a84f-695d64f61371",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"bad-request\",\n  \"title\": \"Bad Request\",\n  \"status\": 400,\n  \"detail\": \"Malformed request\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33ef1382-af9e-4d88-8817-1dd85bc571ae",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"unauthorized\",\n  \"title\": \"Unauthorized\",\n  \"status\": 401,\n  \"detail\": \"Authentication required\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6ba89ef-fa10-4bbb-9bfd-a309f805c4e3",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"forbidden\",\n  \"title\": \"Forbidden\",\n  \"status\": 403,\n  \"detail\": \"Access denied\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e874bdc7-816a-4389-8d1d-921e5fb6c874",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"item-not-found\",\n  \"title\": \"Application Error\",\n  \"status\": 404,\n  \"detail\": \"Tenant not found with name: demo-retail\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e7002ad-9477-449d-9378-c1606552c21a",
+              "name": "Request Validation Failed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"validation-error\",\n  \"title\": \"Request Validation Failed\",\n  \"status\": 422,\n  \"detail\": \"One or more fields failed validation\",\n  \"errors\": [\n    {\n      \"field\": \"query.status\",\n      \"message\": \"Validation failed\",\n      \"type\": \"validation_error\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "551e2792-dda7-430f-9007-c9d60a9dc2b7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    ":tenant_slug",
+                    "cases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "OPEN"
+                    },
+                    {
+                      "key": "website_account_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_is_blocked",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "{{tenant_slug}}",
+                      "key": "tenant_slug",
+                      "description": "Tenant DNS slug (lowercase, hyphenated)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"internal-error\",\n  \"title\": \"Internal Server Error\",\n  \"status\": 500,\n  \"detail\": \"Internal server error\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Tenant DNS slug (lowercase, hyphenated).",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "demo-retail",
+      "key": "tenant_slug"
+    },
+    {
+      "type": "string",
+      "value": "https://api.{{tenant_slug}}.urbanfox.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "create:enduseraccount delete:enduseraccount read:case read:cases read:enduseraccount read:enduseraccounts read:metrics read:snippet read:tenant read:tenant_auth_secret update:case update:enduseraccount update:tenant_auth_secret"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://api.demo-retail.urbanfox.io/v2/oauth/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "18d5c3e3-0b62-442f-9d50-c9329a043990",
+    "name": "UrbanFox Customer Cases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant\nmetrics, and machine-to-machine credentials.\n\n## Authentication\n\nJWT Bearer tokens, issued by `POST /v2/oauth/token` via the OAuth 2.0 client-credentials flow.\n\n## Authorization\n\nEach protected operation declares its required scope in its OAuth 2.0 security requirement.\nTokens missing the required scope receive a `403`.\n\n## Versioning\n\nVersioned via the URL path (`/v2/...`).\n\n\nContact Support:\n Name: UrbanFox",
+      "type": "text/plain"
+    }
+  }
+}
