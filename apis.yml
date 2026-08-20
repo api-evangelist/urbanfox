@@ -37,6 +37,15 @@ tags:
 - Risk Management
 - Security
 - Artificial Intelligence
+- E-Commerce
+tags_raw:
+- Fraud Detection
+- Payment Fraud
+- Account Takeover
+- Bot Detection
+- Risk Management
+- Security
+- Artificial Intelligence
 - eCommerce
 image: https://www.urbanfox.io/hubfs/Favicon.png
 apis:
@@ -82,6 +91,8 @@ apis:
   humanURL: https://docs.urbanfox.io/api-reference
   baseURL: https://api.demo-retail.urbanfox.io
   tags:
+  - Authentication
+  tags_raw:
   - OAuth
   properties:
   - type: OpenAPI
