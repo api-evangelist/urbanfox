@@ -174,8 +174,9 @@ common:
   url: security/urbanfox-domain-security.yml
 - type: AgenticAccess
   url: agentic-access/urbanfox-agentic-access.yml
-- type: MCPServer
+- type: X-MCPServerCandidate
   url: mcp/urbanfox-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
   name: Candidate MCP tool surface derived from the OpenAPI (no official server)
 - type: Conformance
   url: conformance/urbanfox-conformance.yml
