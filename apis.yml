@@ -97,20 +97,6 @@ apis:
     url: openapi/urbanfox-metrics-api-openapi.yml
   - type: Documentation
     url: https://docs.urbanfox.io/
-- aid: urbanfox:urbanfox-oauth-api
-  name: UrbanFox OAuth API
-  description: OAuth token generation for machine-to-machine authentication.
-  humanURL: https://docs.urbanfox.io/api-reference
-  baseURL: https://api.demo-retail.urbanfox.io
-  tags:
-  - Authentication
-  tags_raw:
-  - OAuth
-  properties:
-  - type: OpenAPI
-    url: openapi/urbanfox-oauth-api-openapi.yml
-  - type: Documentation
-    url: https://docs.urbanfox.io/
 - aid: urbanfox:urbanfox-snippet-api
   name: UrbanFox Snippet API
   description: Tenant integration snippet retrieval.
@@ -133,6 +119,18 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/urbanfox-tenants-api-openapi.yml
+  - type: Documentation
+    url: https://docs.urbanfox.io/
+- aid: urbanfox:urbanfox-o-auth-api
+  name: UrbanFox O Auth API
+  description: OAuth token generation for machine-to-machine authentication.
+  humanURL: https://docs.urbanfox.io/api-reference
+  baseURL: https://api.demo-retail.urbanfox.io
+  tags:
+  - O Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/urbanfox-o-auth-api-openapi.yml
   - type: Documentation
     url: https://docs.urbanfox.io/
 maintainers:
