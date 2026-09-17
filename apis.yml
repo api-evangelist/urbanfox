@@ -121,16 +121,16 @@ apis:
     url: openapi/urbanfox-tenants-api-openapi.yml
   - type: Documentation
     url: https://docs.urbanfox.io/
-- aid: urbanfox:urbanfox-o-auth-api
+- aid: urbanfox:urbanfox-oauth-api
   name: UrbanFox O Auth API
   description: OAuth token generation for machine-to-machine authentication.
   humanURL: https://docs.urbanfox.io/api-reference
   baseURL: https://api.demo-retail.urbanfox.io
   tags:
-  - O Auth
+  - OAuth
   properties:
   - type: OpenAPI
-    url: openapi/urbanfox-o-auth-api-openapi.yml
+    url: openapi/urbanfox-oauth-api-openapi.yml
   - type: Documentation
     url: https://docs.urbanfox.io/
 maintainers:
