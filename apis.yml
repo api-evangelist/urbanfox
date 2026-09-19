@@ -127,6 +127,8 @@ apis:
   humanURL: https://docs.urbanfox.io/api-reference
   baseURL: https://api.demo-retail.urbanfox.io
   tags:
+  - Authentication
+  tags_raw:
   - OAuth
   properties:
   - type: OpenAPI
