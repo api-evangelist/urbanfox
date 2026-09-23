@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: UrbanFox Customer Cases Tenants API
+  title: UrbanFox Customer Tenants API
   version: 2.0.0
   summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox customers.
   description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant
@@ -25,9 +25,7 @@ info:
     ## Versioning
 
 
-    Versioned via the URL path (`/v2/...`).
-
-    '
+    Versioned via the URL path (`/v2/...`).'
   contact:
     name: UrbanFox
   license:
@@ -394,26 +392,56 @@ paths:
         - update:tenant_auth_secret
 components:
   schemas:
-    APIResponse_TenantAuthSecretResponse_:
+    TenantDetailsResponse:
       properties:
-        data:
-          $ref: '#/components/schemas/TenantAuthSecretResponse'
-          description: Response payload
+        tenant_name:
+          type: string
+          title: Tenant Name
+          description: Unique tenant slug returned as tenant_name for compatibility (e.g. `/v2/{tenant_slug}/...`)
+          examples:
+          - demo-retail
           readOnly: true
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Stable UUID identifier for the tenant, embedded in JWT claims and downstream services
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        clickstream_app_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Clickstream App Id
+          description: 'Clickstream application identifier injected into the tracking snippet (format: `<tenant_slug>_<32-char-hex>`); null until provisioned'
+          examples:
+          - demo-retail_00000000000000000000000000000001
+          readOnly: true
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+          description: Time the tenant record was created (RFC 3339 / ISO 8601 UTC); null for tenants created before this field was tracked
+          examples:
+          - '2026-03-10T14:32:00Z'
+          readOnly: true
+      additionalProperties: false
       type: object
       required:
-      - data
-      title: APIResponse[TenantAuthSecretResponse]
-    APIResponse_TenantRotateAuthSecretResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[TenantRotateAuthSecretResponse]
+      - tenant_name
+      - tenant_id
+      - client_id
+      title: TenantDetailsResponse
     APIResponse_TenantDetailsResponse_:
       properties:
         data:
@@ -424,6 +452,16 @@ components:
       required:
       - data
       title: APIResponse[TenantDetailsResponse]
+    APIResponse_TenantRotateAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantRotateAuthSecretResponse]
     ProblemDetail:
       properties:
         type:
@@ -487,56 +525,6 @@ components:
       - title
       - status
       title: ProblemDetail
-    TenantDetailsResponse:
-      properties:
-        tenant_name:
-          type: string
-          title: Tenant Name
-          description: Unique tenant slug returned as tenant_name for compatibility (e.g. `/v2/{tenant_slug}/...`)
-          examples:
-          - demo-retail
-          readOnly: true
-        tenant_id:
-          type: string
-          format: uuid
-          title: Tenant Id
-          description: Stable UUID identifier for the tenant, embedded in JWT claims and downstream services
-          examples:
-          - 00000000-0000-4000-8000-000000000000
-          readOnly: true
-        client_id:
-          type: string
-          title: Client Id
-          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
-          examples:
-          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
-          readOnly: true
-        clickstream_app_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Clickstream App Id
-          description: 'Clickstream application identifier injected into the tracking snippet (format: `<tenant_slug>_<32-char-hex>`); null until provisioned'
-          examples:
-          - demo-retail_00000000000000000000000000000001
-          readOnly: true
-        created_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Created At
-          description: Time the tenant record was created (RFC 3339 / ISO 8601 UTC); null for tenants created before this field was tracked
-          examples:
-          - '2026-03-10T14:32:00Z'
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - tenant_name
-      - tenant_id
-      - client_id
-      title: TenantDetailsResponse
     TenantRotateAuthSecretResponse:
       properties:
         client_id:
@@ -581,6 +569,16 @@ components:
       - client_id
       - client_secret
       title: TenantAuthSecretResponse
+    APIResponse_TenantAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantAuthSecretResponse]
   securitySchemes:
     oauth2:
       type: oauth2

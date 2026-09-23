@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: UrbanFox Customer Cases Metrics API
+  title: UrbanFox Customer Metrics API
   version: 2.0.0
   summary: Fraud case management, end-user accounts, and tenant operations for UrbanFox customers.
   description: 'REST API for UrbanFox tenants to manage fraud cases, end-user accounts, tenant
@@ -25,9 +25,7 @@ info:
     ## Versioning
 
 
-    Versioned via the URL path (`/v2/...`).
-
-    '
+    Versioned via the URL path (`/v2/...`).'
   contact:
     name: UrbanFox
   license:
@@ -205,6 +203,39 @@ paths:
         - read:metrics
 components:
   schemas:
+    MetricListResponse:
+      properties:
+        metrics:
+          items:
+            $ref: '#/components/schemas/MetricDataPoint'
+          type: array
+          title: Metrics
+          description: Array of time-series metric data points ordered by timestamp
+          examples:
+          - - guest_sessions: 450
+              non_guest_sessions: 800
+              session_starts: 1150
+              timestamp: '2024-01-01T00:00:00Z'
+              total_events: 1250
+              unique_ids: 980
+              unique_sessions: 1200
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - metrics
+      title: MetricListResponse
+    Aggregations:
+      type: string
+      enum:
+      - minute
+      - hour
+      - day
+      - week
+      - month
+      - quarter
+      - year
+      title: Aggregations
     MetricDataPoint:
       properties:
         timestamp:
@@ -364,39 +395,6 @@ components:
       - unique_ids
       - session_starts
       title: MetricsFields
-    Aggregations:
-      type: string
-      enum:
-      - minute
-      - hour
-      - day
-      - week
-      - month
-      - quarter
-      - year
-      title: Aggregations
-    MetricListResponse:
-      properties:
-        metrics:
-          items:
-            $ref: '#/components/schemas/MetricDataPoint'
-          type: array
-          title: Metrics
-          description: Array of time-series metric data points ordered by timestamp
-          examples:
-          - - guest_sessions: 450
-              non_guest_sessions: 800
-              session_starts: 1150
-              timestamp: '2024-01-01T00:00:00Z'
-              total_events: 1250
-              unique_ids: 980
-              unique_sessions: 1200
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - metrics
-      title: MetricListResponse
   securitySchemes:
     oauth2:
       type: oauth2
