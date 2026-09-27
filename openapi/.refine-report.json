@@ -11,22 +11,19 @@
     "urbanfox-snippet-api-openapi.yml",
     "urbanfox-tenants-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "urbanfox-customer-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "superseded outputs removed: urbanfox-o-auth-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 6 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "urbanfox-cases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "urbanfox-end-user-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "urbanfox-metrics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "urbanfox-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "urbanfox-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "urbanfox-snippet-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "urbanfox-tenants-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]

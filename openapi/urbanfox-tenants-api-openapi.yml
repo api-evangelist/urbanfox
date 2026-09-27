@@ -442,26 +442,6 @@ components:
       - tenant_id
       - client_id
       title: TenantDetailsResponse
-    APIResponse_TenantDetailsResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/TenantDetailsResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[TenantDetailsResponse]
-    APIResponse_TenantRotateAuthSecretResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[TenantRotateAuthSecretResponse]
     ProblemDetail:
       properties:
         type:
@@ -525,6 +505,36 @@ components:
       - title
       - status
       title: ProblemDetail
+    APIResponse_TenantAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantAuthSecretResponse]
+    APIResponse_TenantDetailsResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantDetailsResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantDetailsResponse]
+    APIResponse_TenantRotateAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantRotateAuthSecretResponse]
     TenantRotateAuthSecretResponse:
       properties:
         client_id:
@@ -569,16 +579,6 @@ components:
       - client_id
       - client_secret
       title: TenantAuthSecretResponse
-    APIResponse_TenantAuthSecretResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/TenantAuthSecretResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[TenantAuthSecretResponse]
   securitySchemes:
     oauth2:
       type: oauth2

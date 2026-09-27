@@ -146,16 +146,6 @@ paths:
         - read:snippet
 components:
   schemas:
-    APIResponse_SnippetResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/SnippetResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[SnippetResponse]
     SnippetResponse:
       properties:
         snippets:
@@ -202,32 +192,6 @@ components:
       - app_id
       - tenant_id
       title: SnippetResponse
-    SnippetItem:
-      properties:
-        framework:
-          type: string
-          enum:
-          - HTML
-          - PlaceHolder
-          title: Framework
-          description: Target platform for the snippet. `HTML` is the browser script tag; `PlaceHolder` is reserved for future native SDK targets.
-          examples:
-          - HTML
-          readOnly: true
-        snippet:
-          type: string
-          minLength: 1
-          title: Snippet
-          description: Drop-in integration snippet pre-configured with the tenant's `app_id` and collector endpoint
-          examples:
-          - "<script src=\"https://cdn.example.com/clickstream-web.min.js\"></script>\n<script>\n    window.ClickstreamAnalytics.init({\n        appId: \"demo-retail_00000000000000000000000000000001\",\n        endpoint: \"https://collector.example.com\",\n        globalAttributes: {\n          tenant_id: \"00000000-0000-4000-8000-000000000000\"\n        }\n    })\n</script>"
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - framework
-      - snippet
-      title: SnippetItem
     ProblemDetail:
       properties:
         type:
@@ -291,6 +255,42 @@ components:
       - title
       - status
       title: ProblemDetail
+    APIResponse_SnippetResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/SnippetResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[SnippetResponse]
+    SnippetItem:
+      properties:
+        framework:
+          type: string
+          enum:
+          - HTML
+          - PlaceHolder
+          title: Framework
+          description: Target platform for the snippet. `HTML` is the browser script tag; `PlaceHolder` is reserved for future native SDK targets.
+          examples:
+          - HTML
+          readOnly: true
+        snippet:
+          type: string
+          minLength: 1
+          title: Snippet
+          description: Drop-in integration snippet pre-configured with the tenant's `app_id` and collector endpoint
+          examples:
+          - "<script src=\"https://cdn.example.com/clickstream-web.min.js\"></script>\n<script>\n    window.ClickstreamAnalytics.init({\n        appId: \"demo-retail_00000000000000000000000000000001\",\n        endpoint: \"https://collector.example.com\",\n        globalAttributes: {\n          tenant_id: \"00000000-0000-4000-8000-000000000000\"\n        }\n    })\n</script>"
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - framework
+      - snippet
+      title: SnippetItem
   securitySchemes:
     oauth2:
       type: oauth2
