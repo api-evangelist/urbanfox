@@ -392,6 +392,70 @@ paths:
         - update:tenant_auth_secret
 components:
   schemas:
+    APIResponse_TenantDetailsResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantDetailsResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantDetailsResponse]
+    APIResponse_TenantRotateAuthSecretResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[TenantRotateAuthSecretResponse]
+    TenantRotateAuthSecretResponse:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        client_secret:
+          type: string
+          title: Client Secret
+          description: Newly issued OAuth 2.0 client secret; the previous secret is invalidated immediately
+          examples:
+          - csec_example_9v1t0r8p6m4k2xq7y5w3
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: TenantRotateAuthSecretResponse
+    TenantAuthSecretResponse:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          readOnly: true
+        client_secret:
+          type: string
+          title: Client Secret
+          description: Current OAuth 2.0 client secret; send as `client_secret` (with `client_id`) when requesting a token from `POST /v2/oauth/token`
+          examples:
+          - csec_example_7q9x2k4m6p8r0t1v3w5y
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - client_id
+      - client_secret
+      title: TenantAuthSecretResponse
     TenantDetailsResponse:
       properties:
         tenant_name:
@@ -515,70 +579,6 @@ components:
       required:
       - data
       title: APIResponse[TenantAuthSecretResponse]
-    APIResponse_TenantDetailsResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/TenantDetailsResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[TenantDetailsResponse]
-    APIResponse_TenantRotateAuthSecretResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/TenantRotateAuthSecretResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[TenantRotateAuthSecretResponse]
-    TenantRotateAuthSecretResponse:
-      properties:
-        client_id:
-          type: string
-          title: Client Id
-          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
-          examples:
-          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
-          readOnly: true
-        client_secret:
-          type: string
-          title: Client Secret
-          description: Newly issued OAuth 2.0 client secret; the previous secret is invalidated immediately
-          examples:
-          - csec_example_9v1t0r8p6m4k2xq7y5w3
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - client_id
-      - client_secret
-      title: TenantRotateAuthSecretResponse
-    TenantAuthSecretResponse:
-      properties:
-        client_id:
-          type: string
-          title: Client Id
-          description: OAuth 2.0 client identifier. Send this value as `client_id` when requesting a token from `POST /v2/oauth/token`.
-          examples:
-          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
-          readOnly: true
-        client_secret:
-          type: string
-          title: Client Secret
-          description: Current OAuth 2.0 client secret; send as `client_secret` (with `client_id`) when requesting a token from `POST /v2/oauth/token`
-          examples:
-          - csec_example_7q9x2k4m6p8r0t1v3w5y
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - client_id
-      - client_secret
-      title: TenantAuthSecretResponse
   securitySchemes:
     oauth2:
       type: oauth2

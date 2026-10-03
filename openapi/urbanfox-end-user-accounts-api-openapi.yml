@@ -599,204 +599,6 @@ paths:
         - create:enduseraccount
 components:
   schemas:
-    ProblemDetail:
-      properties:
-        type:
-          type: string
-          title: Type
-          description: URI reference (or identifier) for problem type
-          default: about:blank
-          examples:
-          - validation-error
-          readOnly: true
-        title:
-          type: string
-          title: Title
-          description: Short, human-readable summary
-          examples:
-          - Validation Failed
-          readOnly: true
-        status:
-          type: integer
-          maximum: 599.0
-          minimum: 100.0
-          title: Status
-          description: HTTP status code
-          examples:
-          - 400
-          readOnly: true
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
-          examples:
-          - Request validation failed on one or more fields
-          readOnly: true
-        instance:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Instance
-          description: URI reference identifying this specific occurrence (e.g., request ID)
-          examples:
-          - /v2/demo-retail/cases/case-abc123
-          readOnly: true
-        errors:
-          anyOf:
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          - type: 'null'
-          title: Errors
-          description: Validation errors (extension member)
-          examples:
-          - - field: status
-              message: Input should be 'OPEN' or 'CLOSED'
-              type: enum
-          readOnly: true
-      type: object
-      required:
-      - title
-      - status
-      title: ProblemDetail
-    EndUserAccountListResponse:
-      properties:
-        end_user_accounts:
-          items:
-            $ref: '#/components/schemas/EndUserAccountListItemResponse'
-          type: array
-          title: End User Accounts
-          description: List of end user accounts for the client
-          examples:
-          - - crm_account_id: crm-abc456
-              is_blocked: false
-              is_fraudulent: false
-              is_quarantined: false
-              last_session_updated_on: '2024-01-15T10:30:00Z'
-              tenant_id: 00000000-0000-4000-8000-000000000000
-              website_account_id: account-abc123
-          readOnly: true
-      type: object
-      required:
-      - end_user_accounts
-      title: EndUserAccountListResponse
-    EndUserAccountListItemResponse:
-      properties:
-        tenant_id:
-          type: string
-          format: uuid
-          title: Tenant Id
-          description: Identifier of the tenant that owns this account
-          examples:
-          - 00000000-0000-4000-8000-000000000000
-          readOnly: true
-        website_account_id:
-          type: string
-          title: Website Account Id
-          description: Identifier of the end user's website account
-          examples:
-          - account-abc123
-          readOnly: true
-        crm_account_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Crm Account Id
-          description: Optional identifier linking this account to a record in the tenant's CRM system
-          examples:
-          - crm-abc456
-          readOnly: true
-        is_blocked:
-          type: boolean
-          title: Is Blocked
-          description: True when the account is blocked from accessing services
-          examples:
-          - false
-          readOnly: true
-        is_quarantined:
-          type: boolean
-          title: Is Quarantined
-          description: True when the account is quarantined pending manual review
-          default: false
-          examples:
-          - false
-          readOnly: true
-        is_fraudulent:
-          type: boolean
-          title: Is Fraudulent
-          description: True when the account has been confirmed as fraudulent
-          default: false
-          examples:
-          - false
-          readOnly: true
-        last_session_updated_on:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Session Updated On
-          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
-          examples:
-          - '2024-01-15T10:30:00Z'
-          readOnly: true
-      type: object
-      required:
-      - tenant_id
-      - website_account_id
-      - is_blocked
-      title: EndUserAccountListItemResponse
-    EndUserAccountPutRequestModel:
-      properties:
-        crm_account_id:
-          anyOf:
-          - type: string
-            minLength: 1
-          - type: 'null'
-          title: Crm Account Id
-          description: Optional identifier linking this account to a record in the tenant's CRM system
-          examples:
-          - crm-abc456
-        is_blocked:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Blocked
-          description: Pass `true` to block the account from accessing services; omit to leave unchanged
-          examples:
-          - false
-        is_quarantined:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Quarantined
-          description: Pass `true` to quarantine the account pending manual review; omit to leave unchanged
-          examples:
-          - false
-        is_fraudulent:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Fraudulent
-          description: Pass `true` to mark the account as fraudulent; omit to leave unchanged
-          examples:
-          - false
-        last_session_updated_on:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Session Updated On
-          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
-          examples:
-          - '2024-01-15T10:30:00Z'
-      additionalProperties: false
-      type: object
-      title: EndUserAccountPutRequestModel
-      examples:
-      - is_blocked: true
     EndUserAccountSingleResponse:
       properties:
         tenant_id:
@@ -862,6 +664,135 @@ components:
       - website_account_id
       - is_blocked
       title: EndUserAccountSingleResponse
+    EndUserAccountListItemResponse:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account
+          examples:
+          - account-abc123
+          readOnly: true
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+          readOnly: true
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          examples:
+          - false
+          readOnly: true
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+          readOnly: true
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+          readOnly: true
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+      type: object
+      required:
+      - tenant_id
+      - website_account_id
+      - is_blocked
+      title: EndUserAccountListItemResponse
+    EndUserAccountPostRequestModel:
+      properties:
+        tenant_id:
+          type: string
+          minLength: 1
+          format: uuid
+          title: Tenant Id
+          description: Identifier of the tenant that owns this account
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+        website_account_id:
+          type: string
+          minLength: 1
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+        crm_account_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Crm Account Id
+          description: Optional identifier linking this account to a record in the tenant's CRM system
+          examples:
+          - crm-abc456
+        is_blocked:
+          type: boolean
+          title: Is Blocked
+          description: True when the account is blocked from accessing services
+          default: false
+          examples:
+          - false
+        is_quarantined:
+          type: boolean
+          title: Is Quarantined
+          description: True when the account is quarantined pending manual review
+          default: false
+          examples:
+          - false
+        is_fraudulent:
+          type: boolean
+          title: Is Fraudulent
+          description: True when the account has been confirmed as fraudulent
+          default: false
+          examples:
+          - false
+        last_session_updated_on:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Session Updated On
+          description: Time the most recent session for this account was updated (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_id
+      title: EndUserAccountPostRequestModel
+      examples:
+      - tenant_id: 00000000-0000-4000-8000-000000000000
+        website_account_id: account-abc123
     APIResponse_EndUserAccountListResponse_:
       properties:
         data:
@@ -872,6 +803,16 @@ components:
       required:
       - data
       title: APIResponse[EndUserAccountListResponse]
+    APIResponse_EndUserAccountSingleResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountSingleResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountSingleResponse]
     EndUserAccountResponse:
       properties:
         tenant_id:
@@ -937,51 +878,133 @@ components:
       - website_account_id
       - is_blocked
       title: EndUserAccountResponse
-    EndUserAccountPostRequestModel:
+    EndUserAccountListResponse:
       properties:
-        tenant_id:
-          type: string
-          minLength: 1
-          format: uuid
-          title: Tenant Id
-          description: Identifier of the tenant that owns this account
+        end_user_accounts:
+          items:
+            $ref: '#/components/schemas/EndUserAccountListItemResponse'
+          type: array
+          title: End User Accounts
+          description: List of end user accounts for the client
           examples:
-          - 00000000-0000-4000-8000-000000000000
-        website_account_id:
+          - - crm_account_id: crm-abc456
+              is_blocked: false
+              is_fraudulent: false
+              is_quarantined: false
+              last_session_updated_on: '2024-01-15T10:30:00Z'
+              tenant_id: 00000000-0000-4000-8000-000000000000
+              website_account_id: account-abc123
+          readOnly: true
+      type: object
+      required:
+      - end_user_accounts
+      title: EndUserAccountListResponse
+    ProblemDetail:
+      properties:
+        type:
           type: string
-          minLength: 1
-          title: Website Account Id
-          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
-          default: UNKNOWN
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
           examples:
-          - account-abc123
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    APIResponse_EndUserAccountResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserAccountResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[EndUserAccountResponse]
+    EndUserAccountPutRequestModel:
+      properties:
         crm_account_id:
           anyOf:
           - type: string
+            minLength: 1
           - type: 'null'
           title: Crm Account Id
           description: Optional identifier linking this account to a record in the tenant's CRM system
           examples:
           - crm-abc456
         is_blocked:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
           title: Is Blocked
-          description: True when the account is blocked from accessing services
-          default: false
+          description: Pass `true` to block the account from accessing services; omit to leave unchanged
           examples:
           - false
         is_quarantined:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
           title: Is Quarantined
-          description: True when the account is quarantined pending manual review
-          default: false
+          description: Pass `true` to quarantine the account pending manual review; omit to leave unchanged
           examples:
           - false
         is_fraudulent:
-          type: boolean
+          anyOf:
+          - type: boolean
+          - type: 'null'
           title: Is Fraudulent
-          description: True when the account has been confirmed as fraudulent
-          default: false
+          description: Pass `true` to mark the account as fraudulent; omit to leave unchanged
           examples:
           - false
         last_session_updated_on:
@@ -995,32 +1018,9 @@ components:
           - '2024-01-15T10:30:00Z'
       additionalProperties: false
       type: object
-      required:
-      - tenant_id
-      title: EndUserAccountPostRequestModel
+      title: EndUserAccountPutRequestModel
       examples:
-      - tenant_id: 00000000-0000-4000-8000-000000000000
-        website_account_id: account-abc123
-    APIResponse_EndUserAccountSingleResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/EndUserAccountSingleResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[EndUserAccountSingleResponse]
-    APIResponse_EndUserAccountResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/EndUserAccountResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[EndUserAccountResponse]
+      - is_blocked: true
   securitySchemes:
     oauth2:
       type: oauth2

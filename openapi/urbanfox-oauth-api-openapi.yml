@@ -147,6 +147,75 @@ paths:
               $ref: '#/components/schemas/OAuthTokenFormRequest'
 components:
   schemas:
+    OAuthTokenResponse:
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          title: Access Token
+          description: 'JWT access token; send as `Authorization: Bearer <access_token>` on subsequent API requests'
+          examples:
+          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
+          readOnly: true
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+          description: OAuth 2.0 token type; always `Bearer` for this API
+          examples:
+          - Bearer
+          readOnly: true
+        expires_in:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Expires In
+          description: Number of seconds until the access token expires, counted from issuance
+          examples:
+          - 86400
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - access_token
+      - token_type
+      - expires_in
+      title: OAuthTokenResponse
+    OAuthTokenFormRequest:
+      additionalProperties: false
+      examples:
+      - client_id: A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+        client_secret: csec_example_7q9x2k4m6p8r0t1v3w5y
+        grant_type: client_credentials
+      properties:
+        grant_type:
+          const: client_credentials
+          description: OAuth 2.0 grant type; must be `client_credentials`.
+          examples:
+          - client_credentials
+          title: Grant Type
+          type: string
+        client_id:
+          description: OAuth 2.0 client identifier issued for the tenant.
+          examples:
+          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
+          maxLength: 100
+          minLength: 1
+          title: Client Id
+          type: string
+        client_secret:
+          description: OAuth 2.0 client secret paired with `client_id`.
+          examples:
+          - csec_example_7q9x2k4m6p8r0t1v3w5y
+          maxLength: 200
+          minLength: 1
+          title: Client Secret
+          type: string
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      title: OAuthTokenFormRequestModel
+      type: object
     ProblemDetail:
       properties:
         type:
@@ -210,75 +279,6 @@ components:
       - title
       - status
       title: ProblemDetail
-    OAuthTokenFormRequest:
-      additionalProperties: false
-      examples:
-      - client_id: A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
-        client_secret: csec_example_7q9x2k4m6p8r0t1v3w5y
-        grant_type: client_credentials
-      properties:
-        grant_type:
-          const: client_credentials
-          description: OAuth 2.0 grant type; must be `client_credentials`.
-          examples:
-          - client_credentials
-          title: Grant Type
-          type: string
-        client_id:
-          description: OAuth 2.0 client identifier issued for the tenant.
-          examples:
-          - A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6
-          maxLength: 100
-          minLength: 1
-          title: Client Id
-          type: string
-        client_secret:
-          description: OAuth 2.0 client secret paired with `client_id`.
-          examples:
-          - csec_example_7q9x2k4m6p8r0t1v3w5y
-          maxLength: 200
-          minLength: 1
-          title: Client Secret
-          type: string
-      required:
-      - grant_type
-      - client_id
-      - client_secret
-      title: OAuthTokenFormRequestModel
-      type: object
-    OAuthTokenResponse:
-      properties:
-        access_token:
-          type: string
-          minLength: 1
-          title: Access Token
-          description: 'JWT access token; send as `Authorization: Bearer <access_token>` on subsequent API requests'
-          examples:
-          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
-          readOnly: true
-        token_type:
-          type: string
-          const: Bearer
-          title: Token Type
-          description: OAuth 2.0 token type; always `Bearer` for this API
-          examples:
-          - Bearer
-          readOnly: true
-        expires_in:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Expires In
-          description: Number of seconds until the access token expires, counted from issuance
-          examples:
-          - 86400
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - access_token
-      - token_type
-      - expires_in
-      title: OAuthTokenResponse
   securitySchemes:
     oauth2:
       type: oauth2
