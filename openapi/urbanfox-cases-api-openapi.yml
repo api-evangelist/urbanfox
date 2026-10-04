@@ -406,83 +406,174 @@ paths:
         - read:cases
 components:
   schemas:
-    CaseListItemResponse:
+    CaseState:
       properties:
-        case_id:
+        state_id:
           type: string
-          title: Case Id
-          description: Unique case identifier used in `/cases/{case_id}` paths
+          format: uuid
+          title: State Id
+          description: Stable identifier for this state snapshot, unique within the case
           examples:
-          - case-abc123
+          - 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
           readOnly: true
-        website_account_id:
-          type: string
-          title: Website Account Id
-          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
-          default: UNKNOWN
-          examples:
-          - account-abc123
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-          description: Time the case was opened (RFC 3339 / ISO 8601 UTC)
-          examples:
-          - '2024-01-15T10:30:00Z'
-          readOnly: true
-        status:
+        case_status:
           $ref: '#/components/schemas/CaseStatus'
-          description: Current lifecycle status of the case (OPEN or CLOSED)
+          description: Case lifecycle status captured by this snapshot (OPEN or CLOSED)
           examples:
           - OPEN
           readOnly: true
-        overall_risk_score:
+        session_status:
+          $ref: '#/components/schemas/SessionStatus'
+          description: Status of the underlying user session at the time of this snapshot (ACTIVE or FINISHED)
+          examples:
+          - ACTIVE
+          readOnly: true
+        score:
           type: integer
           maximum: 5.0
           minimum: 1.0
-          title: Overall Risk Score
-          description: Aggregate risk score across all fraud signals, on a 1-5 scale (1=lowest risk, 5=highest risk)
+          title: Score
+          description: Risk score captured by this snapshot, on a 1-5 scale (1=lowest risk, 5=highest risk)
           examples:
-          - 3
+          - 4
+          readOnly: true
+        changed_at:
+          type: string
+          format: date-time
+          title: Changed At
+          description: Time this state change was recorded (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:35:00Z'
+          readOnly: true
+        changed_by:
+          type: string
+          minLength: 1
+          title: Changed By
+          description: Identifier of the actor that triggered this state change. Use `system` for automated transitions; otherwise the user_id of the operator.
+          default: system
+          examples:
+          - system
+          readOnly: true
+        reason:
+          type: string
+          minLength: 1
+          title: Reason
+          description: Human-readable explanation of why the state changed
+          examples:
+          - Case created from model prediction
           readOnly: true
       type: object
       required:
-      - case_id
-      - created_at
-      - status
-      - overall_risk_score
-      title: CaseListItemResponse
-    FraudTypes:
-      type: string
-      enum:
-      - Bot Creation
-      - Synthetic Fraud
-      - Account Takeover
-      - Organic Fraud
-      title: FraudTypes
-    FraudLabels:
-      type: string
-      enum:
-      - Bot
-      - Synthetic
-      - Account Takeover
-      - Organic
-      title: FraudLabels
-    CaseUpdateRequest:
+      - state_id
+      - case_status
+      - session_status
+      - score
+      - changed_at
+      - reason
+      title: CaseState
+    ProblemDetail:
       properties:
-        status:
-          $ref: '#/components/schemas/CaseStatus'
-          description: New lifecycle status to apply to the case (OPEN or CLOSED)
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
           examples:
-          - CLOSED
-      additionalProperties: false
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
       type: object
       required:
+      - title
       - status
-      title: CaseUpdateRequest
-      examples:
-      - status: CLOSED
+      title: ProblemDetail
+    ModelBehaviour:
+      properties:
+        type:
+          type: string
+          minLength: 1
+          title: Type
+          description: Attribution method type
+          examples:
+          - shap
+          readOnly: true
+        model_name:
+          type: string
+          minLength: 1
+          title: Model Name
+          description: Model that produced this attribution
+          examples:
+          - bos_session_aggregate_classifier
+          readOnly: true
+        top_contributors:
+          items:
+            $ref: '#/components/schemas/ShapContributor'
+          type: array
+          title: Top Contributors
+          description: Ranked feature contributions to the prediction
+          examples:
+          - - alignment: supporting
+              description: Total number of events in the session
+              direction: toward_fraud
+              direction_specific: increases_BotActor_probability
+              feature: total_event_count
+              feature_value: 30
+              impact_level: critical
+              plain_name: Total Event Count
+              shap_value: 1.151
+          readOnly: true
+      type: object
+      required:
+      - type
+      - model_name
+      title: ModelBehaviour
     DetailedFraudOccurrence:
       properties:
         occurrence_id:
@@ -557,119 +648,6 @@ components:
       - risk_score
       - explanation
       title: DetailedFraudOccurrence
-    CaseState:
-      properties:
-        state_id:
-          type: string
-          format: uuid
-          title: State Id
-          description: Stable identifier for this state snapshot, unique within the case
-          examples:
-          - 7a54d2a4-5e2f-4b72-9a4a-3276b4af0c11
-          readOnly: true
-        case_status:
-          $ref: '#/components/schemas/CaseStatus'
-          description: Case lifecycle status captured by this snapshot (OPEN or CLOSED)
-          examples:
-          - OPEN
-          readOnly: true
-        session_status:
-          $ref: '#/components/schemas/SessionStatus'
-          description: Status of the underlying user session at the time of this snapshot (ACTIVE or FINISHED)
-          examples:
-          - ACTIVE
-          readOnly: true
-        score:
-          type: integer
-          maximum: 5.0
-          minimum: 1.0
-          title: Score
-          description: Risk score captured by this snapshot, on a 1-5 scale (1=lowest risk, 5=highest risk)
-          examples:
-          - 4
-          readOnly: true
-        changed_at:
-          type: string
-          format: date-time
-          title: Changed At
-          description: Time this state change was recorded (RFC 3339 / ISO 8601 UTC)
-          examples:
-          - '2024-01-15T10:35:00Z'
-          readOnly: true
-        changed_by:
-          type: string
-          minLength: 1
-          title: Changed By
-          description: Identifier of the actor that triggered this state change. Use `system` for automated transitions; otherwise the user_id of the operator.
-          default: system
-          examples:
-          - system
-          readOnly: true
-        reason:
-          type: string
-          minLength: 1
-          title: Reason
-          description: Human-readable explanation of why the state changed
-          examples:
-          - Case created from model prediction
-          readOnly: true
-      type: object
-      required:
-      - state_id
-      - case_status
-      - session_status
-      - score
-      - changed_at
-      - reason
-      title: CaseState
-    RecommendedAction:
-      type: string
-      enum:
-      - MONITOR
-      - CHALLENGE
-      - BLOCK
-      - ESCALATE
-      title: RecommendedAction
-    ModelBehaviour:
-      properties:
-        type:
-          type: string
-          minLength: 1
-          title: Type
-          description: Attribution method type
-          examples:
-          - shap
-          readOnly: true
-        model_name:
-          type: string
-          minLength: 1
-          title: Model Name
-          description: Model that produced this attribution
-          examples:
-          - bos_session_aggregate_classifier
-          readOnly: true
-        top_contributors:
-          items:
-            $ref: '#/components/schemas/ShapContributor'
-          type: array
-          title: Top Contributors
-          description: Ranked feature contributions to the prediction
-          examples:
-          - - alignment: supporting
-              description: Total number of events in the session
-              direction: toward_fraud
-              direction_specific: increases_BotActor_probability
-              feature: total_event_count
-              feature_value: 30
-              impact_level: critical
-              plain_name: Total Event Count
-              shap_value: 1.151
-          readOnly: true
-      type: object
-      required:
-      - type
-      - model_name
-      title: ModelBehaviour
     CaseListResponse:
       properties:
         cases:
@@ -689,6 +667,12 @@ components:
       required:
       - cases
       title: CaseListResponse
+    CaseStatus:
+      type: string
+      enum:
+      - OPEN
+      - CLOSED
+      title: CaseStatus
     APIResponse_CaseSingleResponse_:
       properties:
         data:
@@ -699,86 +683,22 @@ components:
       required:
       - data
       title: APIResponse[CaseSingleResponse]
-    APIResponse_CaseListResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/CaseListResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[CaseListResponse]
-    CaseStatus:
+    RecommendedAction:
       type: string
       enum:
-      - OPEN
-      - CLOSED
-      title: CaseStatus
-    CaseDetails:
-      properties:
-        overall_risk_score:
-          type: integer
-          maximum: 5.0
-          minimum: 1.0
-          title: Overall Risk Score
-          description: Aggregate risk score across all fraud signals, on a 1-5 scale (1=lowest risk, 5=highest risk)
-          examples:
-          - 3
-          readOnly: true
-        fraud_labels:
-          items:
-            $ref: '#/components/schemas/FraudLabels'
-          type: array
-          minItems: 1
-          title: Fraud Labels
-          description: All fraud categories detected for this case; must contain at least the `primary_fraud_label`
-          examples:
-          - - Account Takeover
-            - Bot
-          readOnly: true
-        primary_fraud_label:
-          $ref: '#/components/schemas/FraudLabels'
-          minLength: 1
-          description: Most significant fraud category for this case; always present in `fraud_labels`
-          examples:
-          - Account Takeover
-          readOnly: true
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-          description: Natural-language summary of the detected fraud signals; null when no summary is available
-          examples:
-          - Account takeover attempt detected from suspicious IP
-          readOnly: true
-        highlights:
-          items:
-            type: string
-          type: array
-          title: Highlights
-          description: Short bullet points highlighting the strongest fraud signals contributing to the score
-          examples:
-          - - Multiple failed login attempts
-            - IP from high-risk country
-          readOnly: true
-        recommended_action:
-          anyOf:
-          - $ref: '#/components/schemas/RecommendedAction'
-          - type: 'null'
-          description: 'Suggested response action: MONITOR, CHALLENGE, BLOCK, or ESCALATE'
-          default: BLOCK
-          examples:
-          - BLOCK
-          readOnly: true
-      type: object
-      required:
-      - overall_risk_score
-      - fraud_labels
-      - primary_fraud_label
-      - summary
-      title: CaseDetails
+      - MONITOR
+      - CHALLENGE
+      - BLOCK
+      - ESCALATE
+      title: RecommendedAction
+    FraudTypes:
+      type: string
+      enum:
+      - Bot Creation
+      - Synthetic Fraud
+      - Account Takeover
+      - Organic Fraud
+      title: FraudTypes
     CaseSingleResponse:
       properties:
         case_id:
@@ -938,12 +858,6 @@ components:
       - created_at
       - details
       title: CaseSingleResponse
-    SessionStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - FINISHED
-      title: SessionStatus
     FraudExplanation:
       properties:
         fraud_reason:
@@ -1089,69 +1003,155 @@ components:
       required:
       - feature
       title: ShapContributor
-    ProblemDetail:
+    APIResponse_CaseListResponse_:
       properties:
-        type:
-          type: string
-          title: Type
-          description: URI reference (or identifier) for problem type
-          default: about:blank
-          examples:
-          - validation-error
-          readOnly: true
-        title:
-          type: string
-          title: Title
-          description: Short, human-readable summary
-          examples:
-          - Validation Failed
-          readOnly: true
-        status:
-          type: integer
-          maximum: 599.0
-          minimum: 100.0
-          title: Status
-          description: HTTP status code
-          examples:
-          - 400
-          readOnly: true
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
-          examples:
-          - Request validation failed on one or more fields
-          readOnly: true
-        instance:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Instance
-          description: URI reference identifying this specific occurrence (e.g., request ID)
-          examples:
-          - /v2/demo-retail/cases/case-abc123
-          readOnly: true
-        errors:
-          anyOf:
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          - type: 'null'
-          title: Errors
-          description: Validation errors (extension member)
-          examples:
-          - - field: status
-              message: Input should be 'OPEN' or 'CLOSED'
-              type: enum
+        data:
+          $ref: '#/components/schemas/CaseListResponse'
+          description: Response payload
           readOnly: true
       type: object
       required:
-      - title
+      - data
+      title: APIResponse[CaseListResponse]
+    CaseUpdateRequest:
+      properties:
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: New lifecycle status to apply to the case (OPEN or CLOSED)
+          examples:
+          - CLOSED
+      additionalProperties: false
+      type: object
+      required:
       - status
-      title: ProblemDetail
+      title: CaseUpdateRequest
+      examples:
+      - status: CLOSED
+    SessionStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - FINISHED
+      title: SessionStatus
+    CaseDetails:
+      properties:
+        overall_risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Overall Risk Score
+          description: Aggregate risk score across all fraud signals, on a 1-5 scale (1=lowest risk, 5=highest risk)
+          examples:
+          - 3
+          readOnly: true
+        fraud_labels:
+          items:
+            $ref: '#/components/schemas/FraudLabels'
+          type: array
+          minItems: 1
+          title: Fraud Labels
+          description: All fraud categories detected for this case; must contain at least the `primary_fraud_label`
+          examples:
+          - - Account Takeover
+            - Bot
+          readOnly: true
+        primary_fraud_label:
+          $ref: '#/components/schemas/FraudLabels'
+          minLength: 1
+          description: Most significant fraud category for this case; always present in `fraud_labels`
+          examples:
+          - Account Takeover
+          readOnly: true
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+          description: Natural-language summary of the detected fraud signals; null when no summary is available
+          examples:
+          - Account takeover attempt detected from suspicious IP
+          readOnly: true
+        highlights:
+          items:
+            type: string
+          type: array
+          title: Highlights
+          description: Short bullet points highlighting the strongest fraud signals contributing to the score
+          examples:
+          - - Multiple failed login attempts
+            - IP from high-risk country
+          readOnly: true
+        recommended_action:
+          anyOf:
+          - $ref: '#/components/schemas/RecommendedAction'
+          - type: 'null'
+          description: 'Suggested response action: MONITOR, CHALLENGE, BLOCK, or ESCALATE'
+          default: BLOCK
+          examples:
+          - BLOCK
+          readOnly: true
+      type: object
+      required:
+      - overall_risk_score
+      - fraud_labels
+      - primary_fraud_label
+      - summary
+      title: CaseDetails
+    FraudLabels:
+      type: string
+      enum:
+      - Bot
+      - Synthetic
+      - Account Takeover
+      - Organic
+      title: FraudLabels
+    CaseListItemResponse:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+          description: Unique case identifier used in `/cases/{case_id}` paths
+          examples:
+          - case-abc123
+          readOnly: true
+        website_account_id:
+          type: string
+          title: Website Account Id
+          description: Identifier of the end user's website account; defaults to `UNKNOWN` when the account cannot be resolved
+          default: UNKNOWN
+          examples:
+          - account-abc123
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+          description: Time the case was opened (RFC 3339 / ISO 8601 UTC)
+          examples:
+          - '2024-01-15T10:30:00Z'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/CaseStatus'
+          description: Current lifecycle status of the case (OPEN or CLOSED)
+          examples:
+          - OPEN
+          readOnly: true
+        overall_risk_score:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Overall Risk Score
+          description: Aggregate risk score across all fraud signals, on a 1-5 scale (1=lowest risk, 5=highest risk)
+          examples:
+          - 3
+          readOnly: true
+      type: object
+      required:
+      - case_id
+      - created_at
+      - status
+      - overall_risk_score
+      title: CaseListItemResponse
   securitySchemes:
     oauth2:
       type: oauth2

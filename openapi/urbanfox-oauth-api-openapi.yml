@@ -147,39 +147,6 @@ paths:
               $ref: '#/components/schemas/OAuthTokenFormRequest'
 components:
   schemas:
-    OAuthTokenResponse:
-      properties:
-        access_token:
-          type: string
-          minLength: 1
-          title: Access Token
-          description: 'JWT access token; send as `Authorization: Bearer <access_token>` on subsequent API requests'
-          examples:
-          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
-          readOnly: true
-        token_type:
-          type: string
-          const: Bearer
-          title: Token Type
-          description: OAuth 2.0 token type; always `Bearer` for this API
-          examples:
-          - Bearer
-          readOnly: true
-        expires_in:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Expires In
-          description: Number of seconds until the access token expires, counted from issuance
-          examples:
-          - 86400
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - access_token
-      - token_type
-      - expires_in
-      title: OAuthTokenResponse
     OAuthTokenFormRequest:
       additionalProperties: false
       examples:
@@ -279,6 +246,39 @@ components:
       - title
       - status
       title: ProblemDetail
+    OAuthTokenResponse:
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          title: Access Token
+          description: 'JWT access token; send as `Authorization: Bearer <access_token>` on subsequent API requests'
+          examples:
+          - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example.signature
+          readOnly: true
+        token_type:
+          type: string
+          const: Bearer
+          title: Token Type
+          description: OAuth 2.0 token type; always `Bearer` for this API
+          examples:
+          - Bearer
+          readOnly: true
+        expires_in:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Expires In
+          description: Number of seconds until the access token expires, counted from issuance
+          examples:
+          - 86400
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - access_token
+      - token_type
+      - expires_in
+      title: OAuthTokenResponse
   securitySchemes:
     oauth2:
       type: oauth2

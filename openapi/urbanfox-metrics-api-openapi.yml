@@ -203,6 +203,112 @@ paths:
         - read:metrics
 components:
   schemas:
+    ProblemDetail:
+      properties:
+        type:
+          type: string
+          title: Type
+          description: URI reference (or identifier) for problem type
+          default: about:blank
+          examples:
+          - validation-error
+          readOnly: true
+        title:
+          type: string
+          title: Title
+          description: Short, human-readable summary
+          examples:
+          - Validation Failed
+          readOnly: true
+        status:
+          type: integer
+          maximum: 599.0
+          minimum: 100.0
+          title: Status
+          description: HTTP status code
+          examples:
+          - 400
+          readOnly: true
+        detail:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Detail
+          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
+          examples:
+          - Request validation failed on one or more fields
+          readOnly: true
+        instance:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instance
+          description: URI reference identifying this specific occurrence (e.g., request ID)
+          examples:
+          - /v2/demo-retail/cases/case-abc123
+          readOnly: true
+        errors:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Errors
+          description: Validation errors (extension member)
+          examples:
+          - - field: status
+              message: Input should be 'OPEN' or 'CLOSED'
+              type: enum
+          readOnly: true
+      type: object
+      required:
+      - title
+      - status
+      title: ProblemDetail
+    APIResponse_MetricListResponse_:
+      properties:
+        data:
+          $ref: '#/components/schemas/MetricListResponse'
+          description: Response payload
+          readOnly: true
+      type: object
+      required:
+      - data
+      title: APIResponse[MetricListResponse]
+    MetricListResponse:
+      properties:
+        metrics:
+          items:
+            $ref: '#/components/schemas/MetricDataPoint'
+          type: array
+          title: Metrics
+          description: Array of time-series metric data points ordered by timestamp
+          examples:
+          - - guest_sessions: 450
+              non_guest_sessions: 800
+              session_starts: 1150
+              timestamp: '2024-01-01T00:00:00Z'
+              total_events: 1250
+              unique_ids: 980
+              unique_sessions: 1200
+          readOnly: true
+      additionalProperties: false
+      type: object
+      required:
+      - metrics
+      title: MetricListResponse
+    Aggregations:
+      type: string
+      enum:
+      - minute
+      - hour
+      - day
+      - week
+      - month
+      - quarter
+      - year
+      title: Aggregations
     MetricDataPoint:
       properties:
         timestamp:
@@ -278,101 +384,6 @@ components:
       required:
       - timestamp
       title: MetricDataPoint
-    APIResponse_MetricListResponse_:
-      properties:
-        data:
-          $ref: '#/components/schemas/MetricListResponse'
-          description: Response payload
-          readOnly: true
-      type: object
-      required:
-      - data
-      title: APIResponse[MetricListResponse]
-    ProblemDetail:
-      properties:
-        type:
-          type: string
-          title: Type
-          description: URI reference (or identifier) for problem type
-          default: about:blank
-          examples:
-          - validation-error
-          readOnly: true
-        title:
-          type: string
-          title: Title
-          description: Short, human-readable summary
-          examples:
-          - Validation Failed
-          readOnly: true
-        status:
-          type: integer
-          maximum: 599.0
-          minimum: 100.0
-          title: Status
-          description: HTTP status code
-          examples:
-          - 400
-          readOnly: true
-        detail:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Detail
-          description: Human-readable explanation (MUST NOT contain PII or sensitive data)
-          examples:
-          - Request validation failed on one or more fields
-          readOnly: true
-        instance:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Instance
-          description: URI reference identifying this specific occurrence (e.g., request ID)
-          examples:
-          - /v2/demo-retail/cases/case-abc123
-          readOnly: true
-        errors:
-          anyOf:
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          - type: 'null'
-          title: Errors
-          description: Validation errors (extension member)
-          examples:
-          - - field: status
-              message: Input should be 'OPEN' or 'CLOSED'
-              type: enum
-          readOnly: true
-      type: object
-      required:
-      - title
-      - status
-      title: ProblemDetail
-    MetricListResponse:
-      properties:
-        metrics:
-          items:
-            $ref: '#/components/schemas/MetricDataPoint'
-          type: array
-          title: Metrics
-          description: Array of time-series metric data points ordered by timestamp
-          examples:
-          - - guest_sessions: 450
-              non_guest_sessions: 800
-              session_starts: 1150
-              timestamp: '2024-01-01T00:00:00Z'
-              total_events: 1250
-              unique_ids: 980
-              unique_sessions: 1200
-          readOnly: true
-      additionalProperties: false
-      type: object
-      required:
-      - metrics
-      title: MetricListResponse
     MetricsFields:
       type: string
       enum:
@@ -384,17 +395,6 @@ components:
       - unique_ids
       - session_starts
       title: MetricsFields
-    Aggregations:
-      type: string
-      enum:
-      - minute
-      - hour
-      - day
-      - week
-      - month
-      - quarter
-      - year
-      title: Aggregations
   securitySchemes:
     oauth2:
       type: oauth2
