@@ -64,6 +64,137 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-UrbanFox is a company surfaced as a portfolio company of techstars and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+UrbanFox is an AI-powered online payment fraud detection and prevention platform that uses generative AI and behavioral intelligence - rather than static rule-sets - to detect payment fraud, account takeover, and bot traffic across transactions, sessions, and accounts. The Techstars-backed company ships a tenant-scoped Customer API (OAuth 2.0 client credentials) for fraud case management, end-user account management, activity metrics, credential rotation, and clickstream collector integration.
 
-Backed by: techstars — https://urbanfox.io/
+**Areas:** Fraud Prevention · Payment Fraud · Account Takeover · Bot Detection · Risk Management · Security · Artificial Intelligence · E-Commerce
+
+## UrbanFox on APIs.io
+
+Everything profiled for UrbanFox is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/urbanfox/](https://apis.io/providers/urbanfox/)** — or go straight to one of the APIs or properties below.
+
+### APIs (6)
+
+- [UrbanFox Cases API](https://apis.io/apis/urbanfox/urbanfox-cases-api/) — Fraud case retrieval and updates.
+- [UrbanFox End User Accounts API](https://apis.io/apis/urbanfox/urbanfox-end-user-accounts-api/) — End-user account retrieval, creation, updates, and deletion.
+- [UrbanFox Metrics API](https://apis.io/apis/urbanfox/urbanfox-metrics-api/) — Aggregated tenant metrics and time-series reporting.
+- [UrbanFox Snippet API](https://apis.io/apis/urbanfox/urbanfox-snippet-api/) — Tenant integration snippet retrieval.
+- [UrbanFox Tenants API](https://apis.io/apis/urbanfox/urbanfox-tenants-api/) — Tenant details and tenant authentication credentials.
+- [UrbanFox O Auth API](https://apis.io/apis/urbanfox/urbanfox-oauth-api/) — OAuth token generation for machine-to-machine authentication.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [urbanfox](https://apis.io/servers/urbanfox/urbanfox/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Urbanfox Agentic Access](https://apis.io/agentic-access/urbanfox/urbanfox-agentic-access/)
+
+#### Collections (6)
+
+Postman and Open Collection request collections.
+
+- [UrbanFox Customer Cases API](https://apis.io/collections/urbanfox/open-urbanfox-cases-api/)
+- [UrbanFox Customer Cases End User Accounts API](https://apis.io/collections/urbanfox/open-urbanfox-end-user-accounts-api/)
+- [UrbanFox Customer Cases Metrics API](https://apis.io/collections/urbanfox/open-urbanfox-metrics-api/)
+- [UrbanFox Customer Cases OAuth API](https://apis.io/collections/urbanfox/open-urbanfox-oauth-api/)
+- [UrbanFox Customer Cases Snippet API](https://apis.io/collections/urbanfox/open-urbanfox-snippet-api/)
+- [UrbanFox Customer Cases Tenants API](https://apis.io/collections/urbanfox/open-urbanfox-tenants-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Urbanfox Customer Api Overlay](https://apis.io/overlays/urbanfox/urbanfox-customer-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Urbanfox Authentication](https://apis.io/security/urbanfox/urbanfox-authentication/)
+- [Urbanfox Domain Security](https://apis.io/security/urbanfox/urbanfox-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Urbanfox Scopes](https://apis.io/scopes/urbanfox/urbanfox-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Urbanfox Plans Pricing](https://apis.io/plans/urbanfox/urbanfox-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://urbanfox.io/)
+- [Documentation](https://docs.urbanfox.io/)
+- [Getting started](https://docs.urbanfox.io/tutorials/first-api-call)
+- [API reference](https://docs.urbanfox.io/api-reference)
+- [Pricing](https://www.urbanfox.io/)
+- [Sign up](https://2ffr2z.share-eu1.hsforms.com/2wcLUdqqOSWOmGkVadK7V0g)
+- [Support](https://docs.urbanfox.io/support)
+- [Privacy policy](https://www.urbanfox.io/privacy-policy)
+
+## API Evangelist rating
+
+**Kin Score 37.4** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 55.1 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 56.5 |
+| Access clarity | 23.7 |
+
+**Agent readiness 31.8** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | negotiable (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.5** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/urbanfox/](https://apis.io/providers/urbanfox/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for UrbanFox: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/urbanfox/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
